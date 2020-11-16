@@ -1,5 +1,4 @@
 import networkx as nx
-
 # Returns a path of the type I-V-I (I: Immunized, V: Vulnerable)
 def DFS_metaTreelen2(G, T, V, N, len):
     T.append(N)
