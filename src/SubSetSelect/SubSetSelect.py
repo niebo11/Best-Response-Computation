@@ -4,7 +4,6 @@
 # T_size Size of the target region
 # alpha Creation cost of one edge
 def SubSetSelect(m, n, Cu, T_size, alpha):
-
     # Matrix of tuples (number of nodes we are connected to, list of components we are connected to)
     M = [[[(0,[]) for x in range(n + 1)] for x in range(m + 1)] for x in range (m + 1)]
 

@@ -1,4 +1,5 @@
 import networkx as nx
+from src.utils.graph_utils import DFS
 
 def cutVertexDFS(G, N, V, CV, P, low, disc, time):
     children = 0
@@ -26,7 +27,6 @@ def cutVertexDFS(G, N, V, CV, P, low, disc, time):
             
     return time
             
-            
 def cutVertex(G):
     n = G.number_of_nodes()
     visited = [False] * n
@@ -39,10 +39,20 @@ def cutVertex(G):
     for node in G:
         if visited[node] == False:
             cutVertexDFS(G, node, visited, CV, parent, low, disc, time)
-    return CV
+    return CV    
 
-def constructMetaTree(G):
-    
+def DFS(G, temp, node, visited):
+    visited[node] = True
+
+    temp.append(node)
+
+    for neighbor in list(G.adj[node]):
+        if visited[neighbor] == False:
+            temp = DFS(G, temp, neighbor, visited)
+
+    return temp
+
+def constructMetaTree2(G):
     CV = cutVertex(G)
     
     CVTarget = []
@@ -50,5 +60,28 @@ def constructMetaTree(G):
     for index, value in enumerate(CV):
         if value == True:
             if G.nodes[index]['immunization'] == False and G.nodes[index]['target'] == True:
-                print(index)
+                CVTarget.append(index)
+                
+    result = []
+    visited = [False] * G.number_of_nodes()
+    for i in CVTarget:
+        visited[i] = True
+    
+    for node in G:
+        if visited[node] == False:
+            temp = []
+            result.append(DFS(G, temp, node, visited))
+    
+    for tempt in result:
+        for index in range(len(tempt)):
+            if G.nodes[tempt[index]]['immunization'] == True:
+                aux = tempt[index]
+                i = index
+        for index in range(len(tempt)):
+            if index != i:
+                G = nx.contracted_nodes(G, aux, tempt[index], self_loops = False)
+    return G
+
+                
+    
     

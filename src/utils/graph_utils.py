@@ -22,3 +22,14 @@ def renameGraph(G):
         index += 1
     G = nx.relabel_nodes(G, dict(zip( G, range(G.number_of_nodes()))))
     return [G, mapping]
+
+def DFS(G, temp, node, visited):
+    visited[node] = True
+
+    temp.append(node)
+
+    for neighbor in list(G.adj[node]):
+        if visited[neighbor] == False:
+            temp = DFS(G, temp, neighbor, visited)
+
+    return temp

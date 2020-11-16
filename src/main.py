@@ -1,8 +1,9 @@
-#from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
-from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct2 import constructMetaTree
+from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
+from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct2 import constructMetaTree2
 from PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from utils.graph_utils import drawNetwork, renameGraph
 
+import time
 import numpy as np
 import networkx as nx
 from networkx.algorithms import bipartite
@@ -57,14 +58,17 @@ if __name__=="__main__":
     G.nodes[25]['immunization'] = True
 
     [G, C_D, I] = collapse_graph(G, 3)
-
-    #G = constructMetaTree(G, I)
+    
+    time1 = time.perf_counter()
+    G1 = constructMetaTree(G, I)
+    time2 = time.perf_counter()
+    
+    print('constructMetaTree used: ' + str(time2-time1) + 'seconds')
     
     [G, D] = renameGraph(G)
-
-    drawNetwork(G)
-
-    #Immunized = [k for (k, v) in nx.get_node_attributes(G, 'immunization').items() if v is True]
     
-    constructMetaTree(G)
+    time1 = time.perf_counter()
+    G2 = constructMetaTree2(G)
+    time2= time.perf_counter()
     
+    print('constructMetaTree2 used: ' + str(time2-time1) + 'seconds')

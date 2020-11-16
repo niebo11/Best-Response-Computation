@@ -17,7 +17,6 @@ def collapse(G, i, j, collapse_dict):
 # N actual node
 # I Type of set we are working with (Immunized or not)
 def DFS_collapse(G, T, V, N, I):
-
     V[N] = True
 
     T.append(N)
