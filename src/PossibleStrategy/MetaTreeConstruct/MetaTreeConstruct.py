@@ -19,6 +19,7 @@ def DFS_metaTreeCycle(G, T, V, O, N, len):
     T.append(N)
     aux_T = T[:]
     V[N] = True
+    #print(T)
     for node in list(G.adj[N]):
         if node == O and len > 1:
             return [T, True]
@@ -38,8 +39,8 @@ def constructMetaTree(G, I):
         visited = {item:False for item in G.nodes}
         if DFS_metaTreelen2(G, tempt, visited, I[index],  0):
             for index in range(1, len(tempt)):
-                G = nx.contracted_nodes(G, tempt[0], tempt[index], self_loops = False)
                 if tempt[index] in I:
+                    G = nx.contracted_nodes(G, tempt[0], tempt[index], self_loops = False)
                     I.remove(tempt[index])
         else:
             index += 1
@@ -53,13 +54,12 @@ def constructMetaTree(G, I):
         [tempt, aux] = DFS_metaTreeCycle(G, tempt, visited, I[index], I[index],  0)
         if aux:
             for index in range(1, len(tempt)):
-                G = nx.contracted_nodes(G, tempt[0], tempt[index], self_loops = False)
                 if tempt[index] in I:
+                    print(tempt[index])
+                    G = nx.contracted_nodes(G, tempt[0], tempt[index], self_loops = False)
                     I.remove(tempt[index])
         else:
             index += 1
-
-    #drawNetwork(G)
 
     leaf = [x for x in G.nodes if G.degree[x] == 1 and G.nodes[x]['immunization'] == False]
     for item in leaf:

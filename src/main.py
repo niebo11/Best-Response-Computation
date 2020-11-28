@@ -1,5 +1,4 @@
 from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
-from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct2 import constructMetaTree2
 from PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from utils.graph_utils import drawNetwork, renameGraph
 
@@ -43,6 +42,15 @@ if __name__=="__main__":
     G.add_edge(27, 25)
     G.add_edge(28, 25)
     
+    '''
+    G.add_edge(0, 1)
+    G.add_edge(1, 2)
+    G.add_edge(1, 3)
+    G.add_edge(2, 4)
+    G.add_edge(3, 4)
+    G.add_edge(4, 5)
+    '''
+    
     n = G.number_of_nodes()
 
     for i in range(n):
@@ -56,6 +64,13 @@ if __name__=="__main__":
     G.nodes[16]['immunization'] = True
     G.nodes[21]['immunization'] = True
     G.nodes[25]['immunization'] = True
+    
+    '''
+    G.nodes[0]['immunization'] = True
+    G.nodes[2]['immunization'] = True
+    G.nodes[3]['immunization'] = True
+    G.nodes[5]['immunization'] = True
+    '''
 
     [G, C_D, I] = collapse_graph(G, 3)
     
@@ -65,10 +80,6 @@ if __name__=="__main__":
     
     print('constructMetaTree used: ' + str(time2-time1) + 'seconds')
     
-    [G, D] = renameGraph(G)
+    drawNetwork(G)
     
-    time1 = time.perf_counter()
-    G2 = constructMetaTree2(G)
-    time2= time.perf_counter()
-    
-    print('constructMetaTree2 used: ' + str(time2-time1) + 'seconds')
+    drawNetwork(G1)
