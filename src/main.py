@@ -1,5 +1,6 @@
 from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import collapse_graph
+from PossibleStrategy.MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
 from utils.graph_utils import drawNetwork, renameGraph
 
 import time
@@ -78,10 +79,14 @@ if __name__=="__main__":
     G1 = constructMetaTree(G, I)
     time2 = time.perf_counter()
     
-    print('constructMetaTree used: ' + str(time2-time1) + 'seconds')
+    [G1, mapping] = renameGraph(G1)
     
-    drawNetwork(G1)
+    #print('constructMetaTree used: ' + str(time2-time1) + 'seconds')
     
-    for g in G1:
-        res = "node " +  str(g) + "   size:" + str(G1.nodes[g]['size']) + "\n"
-        print(res)
+    #drawNetwork(G1)
+    
+    #for g in G1:
+        #res = "node " +  str(g) + "   size:" + str(G1.nodes[g]['size']) + "\n"
+        #print(res)
+    
+    MetaTreeSelect(G1, 0, 3)
