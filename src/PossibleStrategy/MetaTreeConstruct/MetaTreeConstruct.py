@@ -40,6 +40,7 @@ def constructMetaTree(G, I):
         if DFS_metaTreelen2(G, tempt, visited, I[index],  0):
             for index in range(1, len(tempt)):
                 if tempt[index] in I:
+                    G.nodes[tempt[0]]['size'] += G.nodes[tempt[index]]['size']
                     G = nx.contracted_nodes(G, tempt[0], tempt[index], self_loops = False)
                     I.remove(tempt[index])
         else:
@@ -55,7 +56,7 @@ def constructMetaTree(G, I):
         if aux:
             for index in range(1, len(tempt)):
                 if tempt[index] in I:
-                    print(tempt[index])
+                    G.nodes[tempt[0]]['size'] += G.nodes[tempt[index]]['size']
                     G = nx.contracted_nodes(G, tempt[0], tempt[index], self_loops = False)
                     I.remove(tempt[index])
         else:
@@ -63,6 +64,7 @@ def constructMetaTree(G, I):
 
     leaf = [x for x in G.nodes if G.degree[x] == 1 and G.nodes[x]['immunization'] == False]
     for item in leaf:
+        G.nodes[next(G.neighbors(item))]['size'] += G.nodes[item]['size']
         G = nx.contracted_nodes(G, next(G.neighbors(item)), item, self_loops = False)
 
     return G

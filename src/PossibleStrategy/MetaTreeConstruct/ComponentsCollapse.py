@@ -48,10 +48,12 @@ def collapse_graph(G, max_T):
                 G.nodes[item[0]]['target'] = False
         else:
             Immunized.append(item[0])
-
+        
+        G.nodes[item[0]]['size'] = 1
         # We collapse the set of nodes
         if len(item) > 1:
             for index in range(1, len(item)):
+                G.nodes[item[0]]['size'] += 1
                 # collapse(G, item[0], item[index], collapse_dict)
                 G = nx.contracted_nodes(G, item[0], item[index], self_loops = False)
     return [G, collapse_dict, Immunized]

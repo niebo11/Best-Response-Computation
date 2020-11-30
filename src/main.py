@@ -80,6 +80,8 @@ if __name__=="__main__":
     
     print('constructMetaTree used: ' + str(time2-time1) + 'seconds')
     
-    drawNetwork(G)
-    
     drawNetwork(G1)
+    
+    for g in G1:
+        res = "node " +  str(g) + "   size:" + str(G1.nodes[g]['size']) + "\n"
+        print(res)
