@@ -89,4 +89,4 @@ if __name__=="__main__":
         #res = "node " +  str(g) + "   size:" + str(G1.nodes[g]['size']) + "\n"
         #print(res)
     
-    MetaTreeSelect(G1, 0, 3)
+    MetaTreeSelect(G1, 1, 15)
