@@ -23,7 +23,7 @@ def dfs_reachable(M, visited, node):
 # G graph
 # C element of the connected component
 # T nodes we are connected to
-def Utility(G, C, T, alpha, target_size):
+def Utility(G, C, T, target_size):
     visited = {item: False for item in C}
     target_objectives = [item for item in C if G.nodes[item]['target']]
     result = 0
@@ -31,7 +31,7 @@ def Utility(G, C, T, alpha, target_size):
         dfs_attacked(G, visited, t)
         for node in T:
             result += dfs_reachable(G, visited, node)
-    result = len(target_objectives) / target_size * result
+    result = 1 / target_size * result
     return result
 
 
@@ -39,13 +39,14 @@ def PossibleStrategy(G, CI, Cinc, alpha, target_size, T_size):
     tempt = [item for item in Cinc if CI in CI]
     empty = Utility(G, CI, [] + tempt, alpha, T_size)
     CImm = [item for item in CI if G.nodes[item]['immunization']]
-    single_edge = {item: Utility(G, CI, [item] + tempt, alpha, T_size) for item in CImm}
+    single_edge = {item: (Utility(G, CI, [item] + tempt, alpha, T_size) - alpha) for item in CImm}
     #TODO change parameter
     [G, C_D, I] = collapse_graph(G, target_size)
     M = constructMetaTree(G, I)
     [M1, mapping] = renameGraph(M)
     opt = MetaTreeSelect(M1, alpha, T_size)
-    multiple_edge = {item: Utility(G, CI, list(item) + tempt, alpha, T_size) for item in opt}
+    multiple_edge = {item: (Utility(G, CI, list(item) + tempt, alpha, T_size) - alpha * len(item))
+                     for item in opt}
 
     max_multiple_edge = max(multiple_edge, key=multiple_edge.get)
     max_single_edge = max(single_edge, key=multiple_edge.get)
