@@ -1,7 +1,5 @@
-from PossibleStrategy.MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
-from PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import collapse_graph
-from PossibleStrategy.MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
 from utils.graph_utils import drawNetwork, renameGraph
+from PossibleStrategy.PossibleStrategy import Utility
 
 import time
 import numpy as np
@@ -88,5 +86,36 @@ if __name__=="__main__":
     #for g in G1:
         #res = "node " +  str(g) + "   size:" + str(G1.nodes[g]['size']) + "\n"
         #print(res)
-    
-    MetaTreeSelect(G1, 1, 15)
+
+    M = nx.Graph()
+
+    M.add_edge(3, 1)
+    M.add_edge(1, 0)
+    M.add_edge(0, 2)
+    M.add_edge(2, 4)
+    M.add_edge(2, 5)
+    M.add_edge(5, 6)
+    M.add_edge(6, 7)
+    M.add_edge(6, 8)
+
+    M.nodes[0]['size'] = 6
+    M.nodes[1]['size'] = 3
+    M.nodes[2]['size'] = 3
+    M.nodes[3]['size'] = 1
+    M.nodes[4]['size'] = 12
+    M.nodes[5]['size'] = 4
+    M.nodes[6]['size'] = 3
+    M.nodes[7]['size'] = 6
+    M.nodes[8]['size'] = 5
+
+    for i in range(0, 8):
+        M.nodes[i]['immunization'] = False
+
+    M.nodes[0]['immunization'] = True
+    M.nodes[3]['immunization'] = True
+    M.nodes[4]['immunization'] = True
+    M.nodes[5]['immunization'] = True
+    M.nodes[7]['immunization'] = True
+    M.nodes[8]['immunization'] = True
+
+    MetaTreeSelect(M, 6, 15)

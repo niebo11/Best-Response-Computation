@@ -10,7 +10,9 @@ def profit(M, leaf, rt, parent, l_d, PROFIT, t_r, sub_tree_size):
                     if M.degree[CHILD2] == 1:
                         result += PROFIT[CHILD2][CHILD2]
                     else:
-                        result += PROFIT[CHILD2][leaf]
+                        #TODO check
+                        if leaf in PROFIT[CHILD2]:
+                            result += PROFIT[CHILD2][leaf]
 
     # TODO CHECK
     if rt == leaf:
@@ -49,7 +51,9 @@ def RootedMetaTreeSelect(M, rt, r, alpha, l_d, sub_tree_size, PROFIT, t_r, leaf,
     # ATTENTION
     for L in leaf:
         if L in nodes:
+            print(nodes, L)
             p = profit(M, L, rt, r, l_d, PROFIT, t_r, sub_tree_size)
+            print(p)
             if p > max_profit:
                 max_profit = p
                 max_l = L
