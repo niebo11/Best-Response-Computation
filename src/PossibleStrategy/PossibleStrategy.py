@@ -35,12 +35,18 @@ def Utility(G, C, T, target_size):
     return result
 
 
-def PossibleStrategy(G, CI, Cinc, alpha, target_size, T_size):
+def possibleStrategy(G, A, I):
+    M = []
+    for C in A:
+        M.append(C[0])
+
+
+def partnerSetSelect(G, CI, Cinc, alpha, target_size, T_size):
     tempt = [item for item in Cinc if CI in CI]
     empty = Utility(G, CI, [] + tempt, alpha, T_size)
     CImm = [item for item in CI if G.nodes[item]['immunization']]
     single_edge = {item: (Utility(G, CI, [item] + tempt, alpha, T_size) - alpha) for item in CImm}
-    #TODO change parameter
+    # TODO change parameter
     [G, C_D, I] = collapse_graph(G, target_size)
     M = constructMetaTree(G, I)
     [M1, mapping] = renameGraph(M)
@@ -60,5 +66,3 @@ def PossibleStrategy(G, CI, Cinc, alpha, target_size, T_size):
             return max_multiple_edge
         else:
             return [max_single_edge]
-
-
