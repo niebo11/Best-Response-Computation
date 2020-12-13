@@ -1,7 +1,7 @@
 import networkx as nx
 
 
-# Innecesary function? Collapse node j into i
+# Unnecessary function? Collapse node j into i
 def collapse(G, i, j, collapse_dict):
     edges = [item for item in G.adj[j] if item not in G.adj[i]]
     for edge in edges:
@@ -21,13 +21,10 @@ def collapse(G, i, j, collapse_dict):
 # I Type of set we are working with (Immunized or not)
 def DFS_collapse(G, T, V, N, I):
     V[N] = True
-
     T.append(N)
-
     for node in list(G.adj[N]):
         if G.nodes[node]['immunization'] == I and not V[node]:
             T = DFS_collapse(G, T, V, node, I)
-
     return T
 
 

@@ -1,16 +1,15 @@
-from utils.graph_utils import connectedComponents, DFS_size_target
+from utils.graph_utils import connectedComponents, DFS_size_target, paintTarget, drawNetwork
 from SubSetSelect.SubSetSelect import subSetSelect
 from GreedySelect.GreedySelect import greedySelect
-from PossibleStrategy.PossibleStrategy import possibleStrategy
-
+from PossibleStrategy.PossibleStrategy import possibleStrategy, Utility
+import networkx as nx
 
 
 # G is a directed graph
 # v is the player which we want to compute the best response
-def bestResponse(G, v, alpha):
+def bestResponse(G, v, alpha, beta):
     outEdge = list(G.out_edges(v))
     Cinc = [u for (u, _) in G.in_edges(v)]
-    print(Cinc)
     # Remove all the edges player v bought
     for edge in outEdge:
         G.remove_edge(*edge)
@@ -33,4 +32,27 @@ def bestResponse(G, v, alpha):
     r = T_size - v_size
     [At, Av] = subSetSelect(len(Cu_minus_Cinc), r, Cu, T_size, alpha)
     Ag = greedySelect(Cu_minus_Cinc, max_T, T_size, alpha)
-    Pt = possibleStrategy(G, At, False, Ci, Cinc, alpha, max_T + r, T_size)
+
+    G_undirected = G.to_undirected()
+    nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
+    G1_undirected, max_T = paintTarget(G_undirected, T_size)
+    G1_undirected.remove_node(v)
+    Sv = possibleStrategy(G1_undirected, Av, False, Ci, Cinc, alpha, max_T, T_size)
+    S = [Sv]
+
+    if r > 0:
+        nx.set_node_attributes(G1_undirected, {v: True}, 'target')
+        for LIST in At:
+            for item in LIST:
+                nx.set_node_attributes(G1_undirected, {item: True}, 'target')
+        St = possibleStrategy(G1_undirected, At, False, Ci, Cinc, alpha, max_T, T_size)
+        S.append(St)
+
+    nx.set_node_attributes(G_undirected, {v: True}, 'immunization')
+    G2_undirected, max_T = paintTarget(G_undirected, T_size)
+    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, max_T, T_size)
+    S.append(Sg)
+    print(S)
+
+
+

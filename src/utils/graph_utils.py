@@ -1,4 +1,6 @@
 import networkx as nx
+from src.PossibleStrategy.PossibleStrategy import dfs_attacked, dfs_reachable
+from src.PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import DFS_collapse
 import matplotlib.pyplot as plt
 
 
@@ -109,3 +111,35 @@ def connectedComponents(G):
                     T_size += max_T * temp_count
 
     return [Cu, Ci, T_size, max_T]
+
+
+def paintTarget(G, T_size):
+    max_T = 0
+    visited = [False] * G.number_of_nodes()
+    for node in G:
+        if not visited[node]:
+            if G.nodes[node]["immunization"]:
+                visited[node] = True
+                G.nodes[node]["target"] = False
+            else:
+                tempt = []
+                DFS_collapse(G, tempt, visited, node, False)
+                if len(tempt) == T_size:
+                    max_T += T_size
+                    for item in tempt:
+                        G.nodes[item]["target"] = True
+                else:
+                    for item in tempt:
+                        G.nodes[item]["target"] = False
+    return G, max_T
+
+
+def utility_s(G, T, v):
+    visited = {item: False for item in G.nodes()}
+    target_objectives = [item for item in G.nodes() if G.nodes[item]['target']]
+    result = 0
+    for t in target_objectives:
+        dfs_attacked(G, visited, t)
+        for node in T:
+            result += dfs_reachable(G, visited, v)
+    return result
