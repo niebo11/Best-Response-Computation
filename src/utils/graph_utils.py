@@ -37,7 +37,6 @@ def DFS_size(G, n, node, visited):
 
 
 def DFS_size_target(G, n, node, visited):
-    print(node)
     visited[node] = True
     for NEIGHBOR in list(G.adj[node]):
         if not visited[NEIGHBOR] and not G.nodes[NEIGHBOR]['immunization']:

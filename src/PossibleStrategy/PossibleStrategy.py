@@ -1,7 +1,7 @@
+from MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
-from MetaTreeConstruct.ComponentsCollapse import collapse_graph
-from ..utils.graph_utils import renameGraph
+from src.utils.graph_utils import drawNetwork, renameGraph
 
 
 def dfs_attacked(M, visited, t):
@@ -23,7 +23,7 @@ def dfs_reachable(M, visited, node):
 # G graph
 # C element of the connected component
 # T nodes we are connected to
-def Utility(G, C, T, target_size):
+def Utility(G, C, T, max_T):
     visited = {item: False for item in C}
     target_objectives = [item for item in C if G.nodes[item]['target']]
     result = 0
@@ -31,27 +31,38 @@ def Utility(G, C, T, target_size):
         dfs_attacked(G, visited, t)
         for node in T:
             result += dfs_reachable(G, visited, node)
-    result = 1 / target_size * result
+    result = 1 / max_T * result
     return result
 
 
-def possibleStrategy(G, A, I):
+def possibleStrategy(G, A, I, Ci, Cinc, alpha, max_T, T_size):
+    print(max_T)
+    print(T_size)
+    print(Ci)
+    print(Cinc)
     M = []
     for C in A:
         M.append(C[0])
+    B = []
+    for C in Ci:
+        B.append(partnerSetSelect(G, C, Cinc, alpha, max_T, T_size))
+    return M + B, I
 
 
-def partnerSetSelect(G, CI, Cinc, alpha, target_size, T_size):
-    tempt = [item for item in Cinc if CI in CI]
-    empty = Utility(G, CI, [] + tempt, alpha, T_size)
-    CImm = [item for item in CI if G.nodes[item]['immunization']]
-    single_edge = {item: (Utility(G, CI, [item] + tempt, alpha, T_size) - alpha) for item in CImm}
+def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
+    # tempt = [item for item in Cinc if CI in CI]
+    # empty = Utility(G, CI, [] + tempt, max_T)
+    print("empty done")
+    # CImm = [item for item in CI if G.nodes[item]['immunization']]
+    # single_edge = {item: (Utility(G, CI, [item] + tempt, max_T) - alpha) for item in CImm}
     # TODO change parameter
-    [G, C_D, I] = collapse_graph(G, target_size)
-    M = constructMetaTree(G, I)
+    [G1, C_D, I] = collapse_graph(G, T_size)
+    drawNetwork(G1)
+    drawNetwork(G)
+    M = constructMetaTree(G1, I)
     [M1, mapping] = renameGraph(M)
     opt = MetaTreeSelect(M1, alpha, T_size)
-    multiple_edge = {item: (Utility(G, CI, list(item) + tempt, alpha, T_size) - alpha * len(item))
+    multiple_edge = {item: (Utility(G, CI, list(item) + tempt, max_T) - alpha * len(item))
                      for item in opt}
 
     max_multiple_edge = max(multiple_edge, key=multiple_edge.get)

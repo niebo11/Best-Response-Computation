@@ -6,7 +6,10 @@
 def greedySelect(Cu, max_T, T_size, alpha):
     result = []
     for CC in Cu:
-        if len(CC) == max_T:
-            if (1 - (max_T / T_size)) > alpha:
+        if len(CC) == T_size:
+            if len(CC)*(1 - (max_T / T_size)) > alpha:
+                result.append(CC)
+        else:
+            if len(CC) > alpha:
                 result.append(CC)
     return result
