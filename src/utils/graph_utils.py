@@ -1,7 +1,22 @@
 import networkx as nx
-from src.PossibleStrategy.PossibleStrategy import dfs_attacked, dfs_reachable
 from src.PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import DFS_collapse
 import matplotlib.pyplot as plt
+
+
+def dfs_attacked(M, visited, t):
+    visited[t] = True
+    for NEIGHBOR in list(M.adj[t]):
+        if not M.nodes[NEIGHBOR]['immunization'] and not visited[NEIGHBOR]:
+            dfs_attacked(M, visited, NEIGHBOR)
+
+
+def dfs_reachable(M, visited, node):
+    result = 1
+    visited[node] = True
+    for NEIGHBOR in list(M.adj[node]):
+        if not visited[NEIGHBOR]:
+            result += dfs_reachable(M, visited, NEIGHBOR)
+    return result
 
 
 def drawNetwork(G):
@@ -36,15 +51,6 @@ def DFS_size(G, n, node, visited):
         if not visited[neighbor]:
             n = DFS_size(G, n, neighbor, visited)
     return n + 1
-
-
-def DFS_size_target(G, n, node, visited):
-    visited[node] = True
-    for NEIGHBOR in list(G.adj[node]):
-        if not visited[NEIGHBOR] and not G.nodes[NEIGHBOR]['immunization']:
-            n = DFS_size(G, n, NEIGHBOR, visited)
-    return n + 1
-
 
 # Return the connected components and whether or not it has a immunized player.
 def DFS(G, temp, node, visited, Immunized):
@@ -134,12 +140,13 @@ def paintTarget(G, T_size):
     return G, max_T
 
 
-def utility_s(G, T, v):
-    visited = {item: False for item in G.nodes()}
+def utility_s(G, T):
     target_objectives = [item for item in G.nodes() if G.nodes[item]['target']]
-    result = 0
+    result = 1
     for t in target_objectives:
+        visited = {item: False for item in G.nodes()}
         dfs_attacked(G, visited, t)
         for node in T:
-            result += dfs_reachable(G, visited, v)
+            if not visited[node]:
+                result += dfs_reachable(G, visited, node)
     return result

@@ -3,7 +3,7 @@ import random as rnd
 import os
 
 
-def connectedComponentNotImmunized(n, k, p, I):
+def connectedComponent(n, k, p, I):
     M = nx.DiGraph()
     notAdded = []
     for i in range(n, k + n):
@@ -40,15 +40,15 @@ if __name__ == '__main__':
         k = rnd.randint(2, 6)
         if k + n > m:
             k = m - n
-        M = connectedComponentNotImmunized(n, k, 0.2, (rnd.random() < 0.3))
+        M = connectedComponent(n, k, 0.01, (rnd.random() < 0.3))
         G = nx.compose(G, M)
         n = n + k
     G.add_node(m)
     G.nodes[m]['immunization'] = (rnd.random() < 0.3)
     for i in range(0, m):
-        if rnd.random() < 0.02:
+        if rnd.random() < 0.01:
             G.add_edge(i, m)
         if rnd.random() < 0.05:
             G.add_edge(m, i)
 
-    nx.write_gpickle(G, os.path.dirname(os.path.abspath(__file__)) + '/test/graph1.pickle')
+    nx.write_gpickle(G, os.path.dirname(os.path.abspath(__file__)) + '/test/graph3.pickle')

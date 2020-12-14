@@ -1,23 +1,7 @@
 from .MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from .MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from .MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
-from src.utils.graph_utils import drawNetwork, renameGraph
-
-
-def dfs_attacked(M, visited, t):
-    visited[t] = True
-    for NEIGHBOR in list(M.adj[t]):
-        if not M.nodes[NEIGHBOR]['immunization'] and not visited[NEIGHBOR]:
-            dfs_attacked(M, visited, NEIGHBOR)
-
-
-def dfs_reachable(M, visited, node):
-    result = 1
-    visited[node] = True
-    for NEIGHBOR in list(M.adj[node]):
-        if not visited[NEIGHBOR]:
-            result += dfs_reachable(M, visited, NEIGHBOR)
-    return result
+from src.utils.graph_utils import drawNetwork, renameGraph, dfs_reachable, dfs_attacked
 
 
 # G graph
@@ -25,10 +9,10 @@ def dfs_reachable(M, visited, node):
 # T nodes we are connected to
 # TODO VISITED IS NOT FINE
 def Utility(G, C, T, max_T):
-    visited = {item: False for item in C}
     target_objectives = [item for item in C if G.nodes[item]['target']]
     result = 0
     for t in target_objectives:
+        visited = {item: False for item in C}
         dfs_attacked(G, visited, t)
         for node in T:
             result += dfs_reachable(G, visited, node)
