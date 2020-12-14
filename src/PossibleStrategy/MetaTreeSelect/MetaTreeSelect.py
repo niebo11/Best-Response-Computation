@@ -10,7 +10,7 @@ def profit(M, leaf, rt, parent, l_d, PROFIT, t_r, sub_tree_size):
                     if M.degree[CHILD2] == 1:
                         result += PROFIT[CHILD2][CHILD2]
                     else:
-                        #TODO check
+                        # TODO check
                         if leaf in PROFIT[CHILD2]:
                             result += PROFIT[CHILD2][leaf]
 

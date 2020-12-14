@@ -3,33 +3,33 @@ import random as rnd
 import os
 
 
-def connectedComponent(n, k, p, I):
-    M = nx.DiGraph()
+def connectedComponent(number_of_nodes, max_nodes, p, Imm):
+    CC = nx.DiGraph()
     notAdded = []
-    for i in range(n, k + n):
-        M.add_node(i)
-        if I:
-            if i == n:
-                M.nodes[i]['immunization'] = True
+    for x in range(number_of_nodes, max_nodes + number_of_nodes):
+        CC.add_node(x)
+        if Imm:
+            if x == number_of_nodes:
+                CC.nodes[x]['immunization'] = True
             elif rnd.random() < p:
-                M.nodes[i]['immunization'] = True
+                CC.nodes[x]['immunization'] = True
             else:
-                M.nodes[i]['immunization'] = False
+                CC.nodes[x]['immunization'] = False
         else:
-            M.nodes[i]['immunization'] = False
-    for i in range(n, k + n):
-        for j in range(n, k + n):
-            if i != j:
-                if not M.has_edge(i, j):
+            CC.nodes[x]['immunization'] = False
+    for x in range(number_of_nodes, max_nodes + number_of_nodes):
+        for j in range(number_of_nodes, max_nodes + number_of_nodes):
+            if x != j:
+                if not CC.has_edge(x, j):
                     if rnd.random() < 0.5:
-                        M.add_edge(i, j)
+                        CC.add_edge(x, j)
                     else:
-                        notAdded.append((i, j))
+                        notAdded.append((x, j))
 
-    while not nx.is_connected(M.to_undirected()):
-        (i, j) = rnd.choice(notAdded)
-        M.add_edge(i, j)
-    return M
+    while not nx.is_connected(CC.to_undirected()):
+        (x, j) = rnd.choice(notAdded)
+        CC.add_edge(x, j)
+    return CC
 
 
 if __name__ == '__main__':

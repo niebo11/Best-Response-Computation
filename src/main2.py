@@ -1,4 +1,4 @@
-from utils.graph_utils import connectedComponents, paintTarget, drawNetwork, utility_s, DFS_size
+from utils.graph_utils import connectedComponents, paintTarget, utility_s, DFS_size
 from SubSetSelect.SubSetSelect import subSetSelect
 from GreedySelect.GreedySelect import greedySelect
 from PossibleStrategy.PossibleStrategy import possibleStrategy
@@ -31,7 +31,7 @@ def bestResponse(G, v, alpha, beta):
             Cu_minus_Cinc.append(CC)
     # First case we don't immunize
     r = T_size - v_size
-    [At, Av] = subSetSelect(len(Cu_minus_Cinc), r, Cu, T_size, alpha)
+    [At, Av] = subSetSelect(len(Cu_minus_Cinc), r, Cu, alpha)
     Ag = greedySelect(Cu_minus_Cinc, max_T, T_size, alpha)
 
     utility = []
@@ -68,6 +68,7 @@ def bestResponse(G, v, alpha, beta):
     i = utility.index(max(utility))
     if i == 0:
         return Sv, utility[i]
+    # TODO fix possible unassigned
     elif r > 0 and i == 1:
         return St, utility[i]
     else:

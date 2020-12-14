@@ -1,7 +1,7 @@
 from .MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from .MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from .MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
-from src.utils.graph_utils import drawNetwork, renameGraph, dfs_reachable, dfs_attacked
+from src.utils.graph_utils import renameGraph, dfs_reachable, dfs_attacked
 
 
 # G graph
@@ -20,14 +20,14 @@ def Utility(G, C, T, max_T):
     return result
 
 
-def possibleStrategy(G, A, I, Ci, Cinc, alpha, max_T, T_size):
+def possibleStrategy(G, A, Imm, Ci, Cinc, alpha, max_T, T_size):
     M = []
     for C in A:
         M.append(C[0])
     B = []
     for C in Ci:
         B += partnerSetSelect(G.subgraph(C), C, Cinc, alpha, max_T, T_size)
-    return M + B, I
+    return M + B, Imm
 
 
 def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
@@ -39,7 +39,7 @@ def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
     # TODO change parameter
     if len(CImm) > 1:
         [G, mappingG] = renameGraph(G)
-        [G1, C_D, I] = collapse_graph(G, T_size)
+        [G1, I] = collapse_graph(G, T_size)
         if len([item for item in G1.nodes if G1.nodes[item]['immunization']]) > 1:
             M = constructMetaTree(G1, I)
             [M1, mappingM] = renameGraph(M)

@@ -3,9 +3,9 @@
 # Cu Set of vulnerable connected components
 # T_size Size of the target region
 # alpha Creation cost of one edge
-def subSetSelect(m, n, Cu, T_size, alpha):
+def subSetSelect(m, n, Cu, alpha):
     # Matrix of tuples (number of nodes we are connected to, list of components we are connected to)
-    M = [[[(0, []) for x in range(n + 1)] for x in range(m + 1)] for x in range(m + 1)]
+    M = [[[(0, []) for _ in range(n + 1)] for _ in range(m + 1)] for _ in range(m + 1)]
 
     for x in range(m + 1):
         for y in range(m + 1):

@@ -19,12 +19,12 @@ def collapse(G, i, j, collapse_dict):
 # V boolean array of visited nodes
 # N actual node
 # I Type of set we are working with (Immunized or not)
-def DFS_collapse(G, T, V, N, I):
+def DFS_collapse(G, T, V, N, Imm):
     V[N] = True
     T.append(N)
     for node in list(G.adj[N]):
-        if G.nodes[node]['immunization'] == I and not V[node]:
-            T = DFS_collapse(G, T, V, node, I)
+        if G.nodes[node]['immunization'] == Imm and not V[node]:
+            T = DFS_collapse(G, T, V, node, Imm)
     return T
 
 
@@ -32,7 +32,6 @@ def DFS_collapse(G, T, V, N, I):
 # max_T size of a target region
 # return the network collapsed + the set of immunized regions.
 def collapse_graph(G, max_T):
-    collapse_dict = {}
     collapseCC = []
     Immunized = []
     visited = [False] * G.number_of_nodes()
@@ -57,4 +56,4 @@ def collapse_graph(G, max_T):
                 G.nodes[item[0]]['size'] += 1
                 # collapse(G, item[0], item[index], collapse_dict)
                 G = nx.contracted_nodes(G, item[0], item[index], self_loops=False)
-    return [G, collapse_dict, Immunized]
+    return [G, Immunized]
