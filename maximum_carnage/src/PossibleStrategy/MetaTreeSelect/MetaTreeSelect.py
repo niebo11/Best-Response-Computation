@@ -45,7 +45,8 @@ def RootedMetaTreeSelect(M, rt, r, alpha, l_d, sub_tree_size, PROFIT, t_r, leaf,
     # ATTENTION
     for L in leaf:
         if L in nodes:
-            p = profit(M, L, rt, r, l_d, PROFIT, t_r, sub_tree_size)
+            p = PROFIT[rt][rt] if rt == L else profit(M, L, rt, r, l_d, PROFIT, t_r, sub_tree_size)
+
             if p > max_profit:
                 max_profit = p
                 max_l = L
