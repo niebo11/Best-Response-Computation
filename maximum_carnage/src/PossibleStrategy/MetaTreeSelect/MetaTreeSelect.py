@@ -93,17 +93,16 @@ def MetaTreeSelect(M, alpha, target_region):
     opt = []
     sub_tree_sizes = [{} for _ in M.nodes]
     # For each immunized node it represents the profit respect to its leaf
-    PROFIT = {}
     first_time = True
     for r in leaf:
+        visited = [False] * M.number_of_nodes()
         leverage_dict = leverage(M, r, visited, {}, 0)
         if first_time:
             SubTreeSize(M, sub_tree_sizes, leaf, leverage_dict)
             first_time = False
         w = next(M.neighbors(r))
         PROFIT = {item: {item: M.nodes[next(M.neighbors(item))]['size'] *
-                               sub_tree_sizes[item][next(M.neighbors(item))] / target_region} for item in leaf}
-        visited = [False] * M.number_of_nodes()
+                  sub_tree_sizes[item][next(M.neighbors(item))] / target_region} for item in leaf}
         aux = set([r] + RootedMetaTreeSelect(M, w, r, alpha, leverage_dict, sub_tree_sizes, PROFIT,
                                              target_region, leaf, M.nodes))
         if aux not in opt:
