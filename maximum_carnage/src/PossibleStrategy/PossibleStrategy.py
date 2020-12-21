@@ -1,13 +1,12 @@
 from .MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from .MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from .MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
-from src.utils.graph_utils import renameGraph, dfs_reachable, dfs_attacked
+from maximum_carnage.src.utils.graph_utils import renameGraph, dfs_reachable, dfs_attacked
 
 
 # G graph
 # C element of the connected component
 # T nodes we are connected to
-# TODO VISITED IS NOT FINE
 def Utility(G, C, T, max_T):
     target_objectives = [item for item in C if G.nodes[item]['target']]
     result = 0

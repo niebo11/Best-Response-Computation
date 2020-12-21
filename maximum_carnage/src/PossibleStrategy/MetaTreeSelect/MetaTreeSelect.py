@@ -6,19 +6,13 @@ def profit(M, leaf, rt, parent, l_d, PROFIT, t_r, sub_tree_size):
     for CHILD in list(M.adj[rt]):
         if l_d[CHILD] > l_d[rt]:
             for CHILD2 in list(M.adj[CHILD]):
-                if l_d[CHILD2] > l_d[CHILD]:
-                    if M.degree[CHILD2] == 1:
-                        result += PROFIT[CHILD2][CHILD2]
-                    else:
-                        # TODO check
-                        if leaf in PROFIT[CHILD2]:
-                            result += PROFIT[CHILD2][leaf]
+                if l_d[CHILD2] > l_d[CHILD] and leaf in PROFIT[CHILD2]:
+                    result += PROFIT[CHILD2][leaf]
 
-    # TODO CHECK
-    if rt == leaf:
+    if rt not in PROFIT:
         PROFIT[rt] = {leaf: result}
     else:
-        PROFIT[rt] = {leaf: result}
+        PROFIT[rt][leaf] = result
     return result
 
 
@@ -51,9 +45,7 @@ def RootedMetaTreeSelect(M, rt, r, alpha, l_d, sub_tree_size, PROFIT, t_r, leaf,
     # ATTENTION
     for L in leaf:
         if L in nodes:
-            print(nodes, L)
             p = profit(M, L, rt, r, l_d, PROFIT, t_r, sub_tree_size)
-            print(p)
             if p > max_profit:
                 max_profit = p
                 max_l = L
@@ -103,12 +95,14 @@ def MetaTreeSelect(M, alpha, target_region):
     PROFIT = {}
     first_time = True
     for r in leaf:
-        visited = [False] * M.number_of_nodes()
         leverage_dict = leverage(M, r, visited, {}, 0)
         if first_time:
             SubTreeSize(M, sub_tree_sizes, leaf, leverage_dict)
             first_time = False
         w = next(M.neighbors(r))
+        PROFIT = {item: {item: M.nodes[next(M.neighbors(item))]['size'] *
+                               sub_tree_sizes[item][next(M.neighbors(item))] / target_region} for item in leaf}
+        visited = [False] * M.number_of_nodes()
         aux = set([r] + RootedMetaTreeSelect(M, w, r, alpha, leverage_dict, sub_tree_sizes, PROFIT,
                                              target_region, leaf, M.nodes))
         if aux not in opt:

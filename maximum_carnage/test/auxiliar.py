@@ -2,7 +2,6 @@ import networkx as nx
 import random as rnd
 import os
 
-
 def connectedComponent(number_of_nodes, max_nodes, p, Imm):
     CC = nx.DiGraph()
     notAdded = []
@@ -51,4 +50,4 @@ if __name__ == '__main__':
         if rnd.random() < 0.05:
             G.add_edge(m, i)
 
-    nx.write_gpickle(G, os.path.dirname(os.path.abspath(__file__)) + '/test/graph3.pickle')
+    nx.write_gpickle(G, os.path.dirname(os.path.abspath(__file__)) + './graph3.pickle')
