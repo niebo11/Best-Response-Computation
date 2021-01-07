@@ -1,5 +1,5 @@
 import networkx as nx
-from src.PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import DFS_collapse
+from maximum_carnage.src.PossibleStrategy.MetaTreeConstruct.ComponentsCollapse import DFS_collapse
 import matplotlib.pyplot as plt
 
 
@@ -51,6 +51,7 @@ def DFS_size(G, n, node, visited):
         if not visited[neighbor]:
             n = DFS_size(G, n, neighbor, visited)
     return n + 1
+
 
 # Return the connected components and whether or not it has a immunized player.
 def DFS(G, temp, node, visited, Immunized):

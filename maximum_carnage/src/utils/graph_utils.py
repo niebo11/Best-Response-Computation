@@ -10,12 +10,12 @@ def dfs_attacked(M, visited, t):
             dfs_attacked(M, visited, NEIGHBOR)
 
 
-def dfs_reachable(M, visited, node):
+def dfs_reachable(M, Nodes, visited, node):
     result = 1
     visited[node] = True
     for NEIGHBOR in list(M.adj[node]):
-        if not visited[NEIGHBOR]:
-            result += dfs_reachable(M, visited, NEIGHBOR)
+        if not visited[NEIGHBOR] and NEIGHBOR in Nodes:
+            result += dfs_reachable(M, Nodes, visited, NEIGHBOR)
     return result
 
 
@@ -91,12 +91,12 @@ def connectedComponents(G):
     T_size = 0
     max_T = 0
 
-    n = G.number_of_nodes()
+    n = G.number_of_nodes() + 1
     Cu = []
     Ci = []
     visited = [False] * n
 
-    for node in range(n):
+    for node in G:
         if not visited[node]:
             temp = []
             Immunized = False
@@ -121,6 +121,7 @@ def connectedComponents(G):
 
 
 def paintTarget(G, T_size):
+    result = []
     max_T = 0
     visited = [False] * G.number_of_nodes()
     for node in G:
@@ -132,22 +133,22 @@ def paintTarget(G, T_size):
                 tempt = []
                 DFS_collapse(G, tempt, visited, node, False)
                 if len(tempt) == T_size:
+                    result.append(tempt)
                     max_T += T_size
                     for item in tempt:
                         G.nodes[item]["target"] = True
                 else:
                     for item in tempt:
                         G.nodes[item]["target"] = False
-    return G, max_T
+    return G, max_T, result
 
 
-def utility_s(G, T):
-    target_objectives = [item for item in G.nodes() if G.nodes[item]['target']]
-    result = 1
-    for t in target_objectives:
+def utility_s(G, v, T, max_T):
+    result = 0
+    for t in T:
         visited = {item: False for item in G.nodes()}
-        dfs_attacked(G, visited, t)
-        for node in T:
-            if not visited[node]:
-                result += dfs_reachable(G, visited, node)
+        for item in t:
+            visited[item] = True
+        if not visited[v]:
+            result += len(t) / max_T * dfs_reachable(G, G.nodes, visited, v)
     return result

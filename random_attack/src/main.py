@@ -1,4 +1,4 @@
-from main2 import bestResponse
+from bestResponse import bestResponse
 import networkx as nx
 
 if __name__ == '__main__':
