@@ -4,8 +4,8 @@
 # alpha Creation cost of one edge
 
 def greedySelect(Cu, max_T, T_size, alpha):
-    result = []
+    A_g = []
     for CC in Cu:
-        if (len(CC) == T_size and len(CC)*(1 - (max_T / T_size)) > alpha) or (T_size > len(CC) > alpha):
-            result.append(CC)
-    return result
+        if (len(CC) == T_size and len(CC)*(1 - (T_size / max_T)) > alpha) or (T_size > len(CC) > alpha):
+            A_g.append(CC)
+    return A_g

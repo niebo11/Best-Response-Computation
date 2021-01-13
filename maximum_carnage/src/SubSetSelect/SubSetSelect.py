@@ -18,26 +18,10 @@ def subSetSelect(m, n, Cu, alpha):
                     else:
                         M[x][y][z] = M[x - 1][y][z]
 
-    max_at = 0
-    max_av = 0
-    index = -1
-    for j in range(m + 1):
-        if M[m][j][n][0] - j * alpha > max_at:
-            index = j
-            max_at = M[m][j][n][0]
-    if index != -1:
-        at = M[m][index][n][1]
-    else:
-        at = []
+    i_at = max([j for j in range(m + 1)], key=lambda l: (M[m][l][n][0] - l*alpha))
+    at = M[m][i_at][n][1]
 
-    index = -1
-    for j in range(m + 1):
-        if M[m][j][n - 1][0] - j * alpha > max_av:
-            index = j
-            max_av = M[m][j][n - 1][0]
-    if index != -1:
-        av = M[m][index][n - 1][1]
-    else:
-        av = []
+    i_av = max([j for j in range(m + 1)], key=lambda l: (M[m][l][n-1][0] - l*alpha))
+    av = M[m][i_av][n-1][1]
 
     return [at, av]
