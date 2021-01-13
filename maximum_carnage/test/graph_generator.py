@@ -7,7 +7,7 @@ def forest_equilibrium():
     G = nx.DiGraph()
     G.add_edge(0, 1)
     G.add_edge(1, 2)
-    G.add_edge(2, 3)
+    G.add_edge(3, 2)
 
     G.add_edge(5, 4)
     G.add_edge(6, 4)
@@ -19,7 +19,7 @@ def forest_equilibrium():
 
     G.add_edge(12, 13)
     G.add_edge(13, 14)
-    G.add_edge(14, 15)
+    G.add_edge(15, 14)
 
     for node in G:
         G.nodes[node]['immunization'] = False

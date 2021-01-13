@@ -2,10 +2,10 @@ from .MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from .MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from .MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
 import networkx as nx
-from maximum_carnage.src.utils.graph_utils import renameGraph, dfs_reachable, dfs_attacked, drawNetwork
+from maximum_carnage.src.utils.graph_utils import renameGraph, dfs_reachable
 
 
-def getTargetRegion(G, Components, size_T):
+def getTargetRegion(G, Components):
     G_ini = G.to_undirected()
     G_ini.remove_nodes_from([node for node in G.nodes if not G_ini.nodes[node]['target'] and node in Components])
     return list(nx.connected_components(G_ini))
@@ -38,7 +38,7 @@ def Utility(G, C, T, targetRegions, max_T, size_T):
     return total
 
 
-def possibleStrategy(G, M, Imm, Ci, Cinc, alpha, max_T, T_size, v):
+def possibleStrategy(G, M, Imm, Ci, Cinc, alpha, max_T, T_size):
     B = []
     for C in Ci:
         B += partnerSetSelect(G.subgraph(C), C, Cinc, alpha, max_T, T_size)
@@ -46,7 +46,7 @@ def possibleStrategy(G, M, Imm, Ci, Cinc, alpha, max_T, T_size, v):
 
 
 def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
-    targetRegions = getTargetRegion(G, CI, max_T)
+    targetRegions = getTargetRegion(G, CI)
     tempt = [item for item in Cinc if item in CI]
     empty = Utility(G, CI, tempt, targetRegions, max_T, T_size)
     CImm = [item for item in CI if G.nodes[item]['immunization']]
@@ -69,15 +69,10 @@ def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
                 opt = MetaTreeSelect(M1, Cinc_f, alpha, T_size)
                 opt = initial_opt(opt, mappingG, mappingM)
 
-                multiple_edge = {tuple(item): (Utility(G, CI, item + tempt, targetRegions, max_T, T_size) - alpha * len(item))
-                                 for item in opt}
+                multiple_edge = {tuple(item): (Utility(G, CI, item + tempt, targetRegions, max_T, T_size)
+                                 - alpha * len(item)) for item in opt}
 
                 max_multiple_edge = max(multiple_edge, key=multiple_edge.get)
-
-                print(max_multiple_edge)
-                print('multiple edge:', multiple_edge[max_multiple_edge])
-                print('max single edge:', single_edge[max_single_edge])
-                print('empty:', empty)
 
                 if empty > multiple_edge[max_multiple_edge]:
                     if empty > single_edge[max_single_edge]:

@@ -1,4 +1,4 @@
-from utils.graph_utils import connectedComponents, paintTarget, utility_s, DFS_size, drawNetwork
+from utils.graph_utils import connectedComponents, paintTarget, utility_s, DFS_size
 from SubSetSelect.SubSetSelect import subSetSelect
 from GreedySelect.GreedySelect import greedySelect
 from PossibleStrategy.PossibleStrategy import possibleStrategy
@@ -50,7 +50,7 @@ def bestResponse(G_ini, v, alpha, beta):
     nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
     G1_undirected, max_T, R_t = paintTarget(G_undirected, T_size)
     G1_undirected.remove_node(v)
-    Sv = possibleStrategy(G1_undirected, Av, False, Ci, Cinc, alpha, max_T, T_size, v)
+    Sv = possibleStrategy(G1_undirected, Av, False, Ci, Cinc, alpha, max_T, T_size)
     G1_undirected.add_node(v)
     G1_undirected.nodes[v]['immunization'] = False
     G1_undirected.nodes[v]['target'] = False
@@ -66,7 +66,7 @@ def bestResponse(G_ini, v, alpha, beta):
             G_undirected.add_edge(v, item)
         G1_undirected, max_T, R_t = paintTarget(G_undirected, T_size)
         G1_undirected.remove_node(v)
-        St = possibleStrategy(G1_undirected, At, False, Ci, Cinc, alpha, max_T, T_size, v)
+        St = possibleStrategy(G1_undirected, At, False, Ci, Cinc, alpha, max_T, T_size)
 
         G1_undirected.add_node(v)
         G1_undirected.nodes[v]['immunization'] = False
@@ -80,7 +80,7 @@ def bestResponse(G_ini, v, alpha, beta):
     nx.set_node_attributes(G_undirected, {v: True}, 'immunization')
     G2_undirected, max_T, R_t = paintTarget(G_undirected, T_size_Imm)
     G2_undirected.remove_node(v)
-    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, max_T, T_size_Imm, v)
+    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, max_T, T_size_Imm)
 
     G2_undirected.add_node(v)
     G2_undirected.nodes[v]['immunization'] = True

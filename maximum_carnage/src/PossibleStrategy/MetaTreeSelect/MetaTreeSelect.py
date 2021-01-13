@@ -89,8 +89,6 @@ def SubTreeSize(M, sub_tree_sizes, leaf, l_d):
 
 def MetaTreeSelect(M, Cinc, alpha, target_region):
     # Fulles de M
-    print('MetaTreeSelect:', Cinc)
-    print([item for item in M.nodes])
     leaf = [x for x in M.nodes if M.degree[x] == 1]
     opt = []
     sub_tree_sizes = [{} for _ in M.nodes]

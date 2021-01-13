@@ -14,8 +14,8 @@ def initial_utility(G, v, alpha, beta):
 
 
 if __name__ == '__main__':
-    G = nx.read_gpickle("../test/forest.pickle")
-    alpha = 1/3
+    G = nx.read_gpickle("../test/complete_bipartite.pickle")
+    alpha = 0.1
     beta = 4
     drawNetwork(G)
 
@@ -25,4 +25,5 @@ if __name__ == '__main__':
         BR = bestResponse(G.copy(), i, alpha, beta)
         print("node :", i)
         print("initial strategy utility: ", ini_u, "calculated BR utility :", BR[1])
-        print(BR)
+        if BR[1] > ini_u:
+            print(BR[0])
