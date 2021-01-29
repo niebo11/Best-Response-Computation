@@ -2,6 +2,7 @@ import networkx as nx
 import random as rnd
 import os
 
+
 def connectedComponent(number_of_nodes, max_nodes, p, Imm):
     CC = nx.DiGraph()
     notAdded = []

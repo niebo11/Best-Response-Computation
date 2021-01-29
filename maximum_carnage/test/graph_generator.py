@@ -1,6 +1,5 @@
 import networkx as nx
 import os
-from maximum_carnage.src.utils.graph_utils import drawNetwork
 
 
 def forest_equilibrium():

@@ -14,7 +14,7 @@ def initial_utility(G, v, alpha, beta):
 
 
 if __name__ == '__main__':
-    G = nx.read_gpickle("../test/graph3.pickle")
+    G = nx.read_gpickle("../test/flower.pickle")
     alpha = 0.1
     beta = 4
     drawNetwork(G)

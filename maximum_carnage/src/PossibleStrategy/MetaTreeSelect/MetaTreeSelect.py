@@ -79,12 +79,9 @@ def SubTreeSize(M, sub_tree_sizes, leaf, l_d):
             # We compute the size of the subtree in respect to the tree rooted by l_d
             sub_tree_sizes[item][aux] = M.nodes[item]['size']
             for CHILD in list(M.adj[item]):
-                if l_d[CHILD] > l_d[aux]:
+                if CHILD != aux:
                     sub_tree_sizes[item][aux] += sub_tree_sizes[CHILD][item]
-            # If the parent was one of its other nodes then we have an easy approach by using the total size of the tree
-            for NEIGHBOR in list(M.adj[item]):
-                if NEIGHBOR != aux:
-                    sub_tree_sizes[item][NEIGHBOR] = total_size - sub_tree_sizes[NEIGHBOR][item]
+                    sub_tree_sizes[item][CHILD] = total_size - sub_tree_sizes[CHILD][item]
 
 
 def MetaTreeSelect(M, Cinc, alpha, target_region):

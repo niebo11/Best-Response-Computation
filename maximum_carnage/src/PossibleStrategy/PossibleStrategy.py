@@ -27,10 +27,8 @@ def initial_opt(opt, mappingG, mappingM):
 def Utility(G, C, T, targetRegions, max_T, size_T):
     total = 0
     for item in targetRegions:
-        visited = {item: False for item in C}
+        visited = {key: (True if key in item else False) for key in C}
         result = 0
-        for elem in item:
-            visited[elem] = True
         for elem in T:
             if not visited[elem]:
                 result += dfs_reachable(G, C, visited, elem)
