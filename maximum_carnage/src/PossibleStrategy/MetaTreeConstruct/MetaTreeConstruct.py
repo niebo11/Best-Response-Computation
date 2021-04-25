@@ -10,7 +10,6 @@ def DFS_metaTree_len2(G, T, V, N):
     if len(T) == 3:
         return T, True
     for node in list(G.adj[N]):
-        # print(N, node, T)
         if not V[node]:
             if G.nodes[node]['immunization']:
                 T, find = DFS_metaTree_len2(G, T, V, node)
@@ -30,7 +29,6 @@ def DFS_metaTree_cycle(G, T, V, Origin, N, length):
     T.append(N)
     aux_T = T[:]
     V[N] = True
-    # print(T)
     for node in list(G.adj[N]):
         if node == Origin and length > 1:
             return [T, True]

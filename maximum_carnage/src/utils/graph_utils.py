@@ -143,6 +143,7 @@ def paintTarget(G, T_size):
     return G, max_T, result
 
 
+# utility from player v
 def utility_s(G, v, T, max_T):
     result = 0
     for t in T:
@@ -152,3 +153,4 @@ def utility_s(G, v, T, max_T):
         if not visited[v]:
             result += len(t) / max_T * dfs_reachable(G, G.nodes, visited, v)
     return result
+

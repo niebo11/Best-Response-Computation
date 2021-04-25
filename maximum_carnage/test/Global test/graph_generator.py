@@ -23,6 +23,9 @@ def forest_equilibrium():
     for node in G:
         G.nodes[node]['immunization'] = False
 
+    G.nodes[0]['alpha'] = 1
+    G.nodes[0]['beta'] = 9
+
     return G
 
 
@@ -34,6 +37,9 @@ def cycle_equilibrium():
     G.add_edge(n, 0)
     for node in G:
         G.nodes[node]['immunization'] = True if node % 2 == 0 else False
+
+    G.nodes[0]['alpha'] = 1.5
+    G.nodes[0]['beta'] = 3
 
     return G
 
@@ -62,6 +68,10 @@ def flower_equilibrium():
             G.nodes[node]['immunization'] = True
         else:
             G.nodes[node]['immunization'] = False
+
+    G.nodes[0]['alpha'] = 0.1
+    G.nodes[0]['beta'] = 3
+
     return G
 
 
@@ -88,16 +98,26 @@ def complete_bipartite_equilibrium():
             G.nodes[node]['immunization'] = True
         else:
             G.nodes[node]['immunization'] = False
+    G.nodes[0]['alpha'] = 0.1
+    G.nodes[0]['beta'] = 4
+    return G
+
+
+def empty_equilibrium():
+    G = nx.DiGraph()
+    for i in range(0, 50):
+        G.add_node(i)
+        G.nodes[i]['immunization'] = True
+    G.nodes[0]['alpha'] = 2
+    G.nodes[0]['beta'] = 1
     return G
 
 
 if __name__ == '__main__':
-    G = forest_equilibrium()
-    H = cycle_equilibrium()
-    Y = flower_equilibrium()
-    K = complete_bipartite_equilibrium()
 
-    nx.write_gpickle(G, os.path.dirname(os.path.abspath(__file__)) + './forest.pickle')
-    nx.write_gpickle(H, os.path.dirname(os.path.abspath(__file__)) + './cycle.pickle')
-    nx.write_gpickle(Y, os.path.dirname(os.path.abspath(__file__)) + './flower.pickle')
-    nx.write_gpickle(K, os.path.dirname(os.path.abspath(__file__)) + './complete_bipartite.pickle')
+    nx.write_gpickle(forest_equilibrium(), os.path.dirname(os.path.abspath(__file__)) + './forest.pickle')
+    nx.write_gpickle(cycle_equilibrium(), os.path.dirname(os.path.abspath(__file__)) + './cycle.pickle')
+    nx.write_gpickle(flower_equilibrium(), os.path.dirname(os.path.abspath(__file__)) + './flower.pickle')
+    nx.write_gpickle(complete_bipartite_equilibrium(), os.path.dirname(os.path.abspath(__file__)) +
+                     './complete_bipartite.pickle')
+    nx.write_gpickle(empty_equilibrium(), os.path.dirname(os.path.abspath(__file__)) + './empty.pickle')

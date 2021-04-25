@@ -1,7 +1,7 @@
-from utils.graph_utils import connectedComponents, paintTarget, utility_s, DFS_size
-from SubSetSelect.SubSetSelect import subSetSelect
-from GreedySelect.GreedySelect import greedySelect
-from PossibleStrategy.PossibleStrategy import possibleStrategy
+from maximum_carnage.src.utils.graph_utils import connectedComponents, paintTarget, utility_s, DFS_size
+from maximum_carnage.src.SubSetSelect.SubSetSelect import subSetSelect
+from maximum_carnage.src.GreedySelect.GreedySelect import greedySelect
+from maximum_carnage.src.PossibleStrategy.PossibleStrategy import possibleStrategy
 import networkx as nx
 import random as rnd
 
@@ -34,7 +34,7 @@ def bestResponse(G_ini, v, alpha, beta):
             Cu_minus_Cinc.append(CC)
     # First case we don't immunize
     r = T_size - v_size
-    [At, Av] = subSetSelect(len(Cu_minus_Cinc), r, Cu_minus_Cinc, alpha)
+    At, Av = subSetSelect(len(Cu_minus_Cinc), r, Cu_minus_Cinc, alpha)
     Ag = greedySelect(Cu_minus_Cinc, max_T, T_size, alpha)
 
     At = [rnd.choice(item) for item in At]

@@ -3,7 +3,8 @@
 # Cu Set of vulnerable connected components
 # T_size Size of the target region
 # alpha Creation cost of one edge
-def uniformSubSetSelect(m, n, Cu, alpha):
+
+def uniformSubSetSelect(currentSize, m, n, Cu, alpha):
     # Matrix of tuples (number of nodes we are connected to, list of components we are connected to)
     M = [[[(0, []) for _ in range(n + 1)] for _ in range(m + 1)] for _ in range(m + 1)]
 
@@ -26,13 +27,15 @@ def uniformSubSetSelect(m, n, Cu, alpha):
                     else:
                         M[x][y][z] = M[x - 1][y][z]
 
-    k = []
+    max_value = 0
+    result = []
+    print(n)
+
     for z in range(n + 1):
-        for j in range(m+1):
-            if M[m][j][z][0] == z:
-                k.append((m, j, z))
-                break
-    alpha = []
-    for x, y, z in k:
-        alpha = 1
-    return []
+        for j in range(m + 1):
+            aux = currentSize + M[m][j][z][0]
+            tempt = aux * (1 - aux/n) - alpha * j
+            if tempt > max_value:
+                max_value = tempt
+                result = M[m][j][z][1]
+    return result

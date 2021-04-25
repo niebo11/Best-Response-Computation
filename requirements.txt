@@ -2,3 +2,4 @@ networkx~=2.5
 matplotlib~=3.3.3
 numpy~=1.19.4
 setuptools~=51.0.0
+igraph~=0.7.1

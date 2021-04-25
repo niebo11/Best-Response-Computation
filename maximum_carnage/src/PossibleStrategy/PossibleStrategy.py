@@ -50,10 +50,13 @@ def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
     CImm = [item for item in CI if G.nodes[item]['immunization']]
     single_edge = {item: (Utility(G, CI, list(set([item] + tempt)), targetRegions, max_T, T_size) - alpha)
                    for item in CImm if item not in Cinc}
-    max_single_edge = max(single_edge, key=single_edge.get)
+    if len(single_edge) > 0:
+        max_single_edge = max(single_edge, key=single_edge.get)
+
     # TODO change parameter
     if len(CImm) > 1:
         G1 = G.subgraph(CI)
+        # drawNetwork(G1)
         G1, mappingG = renameGraph(G1)
         inv_mappingG = {v: k for k, v in mappingG.items()}
         G2, I, collapse_dict = collapse_graph(G1, T_size)
