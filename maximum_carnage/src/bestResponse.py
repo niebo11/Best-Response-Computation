@@ -6,6 +6,19 @@ import networkx as nx
 import random as rnd
 
 
+def initial_utility(G, v, alpha, beta):
+    G_ini = G.to_undirected()
+    G_ini.remove_nodes_from([node for node in G.nodes if G_ini.nodes[node]['immunization']])
+    length_of_vulnerable_region = list(map(len, list(nx.connected_components(G_ini))))
+    if len(length_of_vulnerable_region) > 0:
+        size_T = max(length_of_vulnerable_region)
+    else:
+        size_T = 0
+    G_ini = G.to_undirected()
+    G_ini, max_T, R_t = paintTarget(G_ini, size_T)
+    return utility_s(G_ini, v, R_t, max_T) - len(list(G.out_edges(v))) * alpha - G.nodes[v]['immunization'] * beta
+
+
 # G is a directed graph
 # v is the player which we want to compute the best response
 def bestResponse(G_ini, v, alpha, beta):
@@ -35,22 +48,21 @@ def bestResponse(G_ini, v, alpha, beta):
     # First case we don't immunize
     r = T_size - v_size
     At, Av = subSetSelect(len(Cu_minus_Cinc), r, Cu_minus_Cinc, alpha)
-    Ag = greedySelect(Cu_minus_Cinc, max_T, T_size, alpha)
 
     At = [rnd.choice(item) for item in At]
     Av = [rnd.choice(item) for item in Av]
-    Ag = [rnd.choice(item) for item in Ag]
 
     utility = []
 
     G_undirected = G_ini.to_undirected()
     G_undirected.remove_edges_from(outEdge)
-    for item in Av:
+    for item in Av + Cinc:
         G_undirected.add_edge(v, item)
     nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
     G1_undirected, max_T, R_t = paintTarget(G_undirected, T_size)
+    Targeted = G1_undirected.nodes[v]['target']
     G1_undirected.remove_node(v)
-    Sv = possibleStrategy(G1_undirected, Av, False, Ci, Cinc, alpha, max_T, T_size)
+    Sv = possibleStrategy(G1_undirected, Av, False, Ci, Cinc, alpha, max_T, T_size, Targeted)
     G1_undirected.add_node(v)
     G1_undirected.nodes[v]['immunization'] = False
     G1_undirected.nodes[v]['target'] = False
@@ -58,15 +70,17 @@ def bestResponse(G_ini, v, alpha, beta):
         G1_undirected.add_edge(v, node)
     utility.append(utility_s(G1_undirected, v, R_t, max_T) - len(Sv[0]) * alpha - Sv[1] * beta)
 
+
     if r > 0:
         G_undirected = G_ini.to_undirected()
         nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
         G_undirected.remove_edges_from(outEdge)
-        for item in At:
+        for item in At + Cinc:
             G_undirected.add_edge(v, item)
         G1_undirected, max_T, R_t = paintTarget(G_undirected, T_size)
+        Targeted = G1_undirected.nodes[v]['target']
         G1_undirected.remove_node(v)
-        St = possibleStrategy(G1_undirected, At, False, Ci, Cinc, alpha, max_T, T_size)
+        St = possibleStrategy(G1_undirected, At, False, Ci, Cinc, alpha, max_T, T_size, Targeted)
 
         G1_undirected.add_node(v)
         G1_undirected.nodes[v]['immunization'] = False
@@ -77,22 +91,36 @@ def bestResponse(G_ini, v, alpha, beta):
         utility.append(utility_s(G1_undirected, v, R_t, max_T) - len(St[0]) * alpha - St[1] * beta)
 
     G_undirected = G_ini.to_undirected()
+    G_undirected.remove_edges_from(outEdge)
+    for item in Cinc:
+        G_undirected.add_edge(v, item)
     nx.set_node_attributes(G_undirected, {v: True}, 'immunization')
     G2_undirected, max_T, R_t = paintTarget(G_undirected, T_size_Imm)
+    Targeted = G_undirected.nodes[v]['target']
+    Ag = greedySelect(Cu_minus_Cinc, max_T, T_size_Imm, alpha)
+    Ag = [rnd.choice(item) for item in Ag]
     G2_undirected.remove_node(v)
-    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, max_T, T_size_Imm)
+    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, max_T, T_size_Imm, Targeted)
 
     G2_undirected.add_node(v)
     G2_undirected.nodes[v]['immunization'] = True
-    G2_undirected.nodes[v]['target'] = False
     for node in Sg[0] + Cinc:
         G2_undirected.add_edge(v, node)
-
     utility.append(utility_s(G2_undirected, v, R_t, max_T) - len(Sg[0]) * alpha - Sg[1] * beta)
 
+    G_undirected = G_ini.to_undirected()
+    G_undirected.remove_edges_from(outEdge)
+    for item in Cinc:
+        G_undirected.add_edge(v, item)
+    nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
+    G2_undirected, max_T, R_t = paintTarget(G_undirected, T_size)
+    utility.append(utility_s(G2_undirected, v, R_t, max_T))
     i = utility.index(max(utility))
+
     if i == 0:
         return Sv, utility[i]
+    elif (r > 0 and i == 3) or (r == 0 and i == 2):
+        return ([], False), utility[i]
     elif r > 0 and i == 1:
         return St, utility[i]
     else:

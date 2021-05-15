@@ -1,5 +1,6 @@
 import networkx as nx
 from networkx.drawing.nx_agraph import to_agraph
+from maximum_carnage.src.utils.graph_utils import paintTarget
 import random as rd
 
 
@@ -12,7 +13,7 @@ def getTargetRegion(G):
 
 def randomGraph(n):
     G = nx.connected_watts_strogatz_graph(n, 2, 1, seed=rd.randint(1, 10000))
-    immunized = rd.sample(range(0, n), int(n/5.0 + 1))
+    immunized = rd.sample(range(0, n), int(n / 5.0 + 1))
     dict_immunization = {node: (False if node not in immunized else True) for node in G.nodes()}
     dict_size = {node: 1 for node in G.nodes}
     nx.set_node_attributes(G, dict_immunization, 'immunization')
@@ -24,8 +25,8 @@ def randomGraph(n):
 def randomGraph2(n, target_size):
     dict_size = {}
     first = True
-    m = rd.randint(int(n/2), n)
-    G = nx.algorithms.bipartite.generators.random_graph(n, m, p=(1/n))
+    m = rd.randint(int(n / 2), n)
+    G = nx.algorithms.bipartite.generators.random_graph(n, m, p=(1 / n))
     CC = sorted(nx.connected_components(G), key=len, reverse=True)
     largest_cc = max(CC, key=len)
     for i in range(1, 10):
@@ -41,7 +42,7 @@ def randomGraph2(n, target_size):
     for node in immunized:
         dict_size[node] = rd.randint(1, target_size)
     for node in vulnerable:
-        if first or rd.random() < 1/5:
+        if first or rd.random() < 1 / 5:
             dict_size[node] = target_size
             first = False
         else:
@@ -55,6 +56,30 @@ def randomGraph2(n, target_size):
         del d['bipartite']
 
     return G2, immunized
+
+
+def randomGraph3(n, p):
+    G = nx.generators.random_graphs.erdos_renyi_graph(n, p, directed=True)
+    immunized = rd.sample(range(0, n), int(n / 4.0 + 1))
+    dict_immunization = {node: (False if node not in immunized else True) for node in G.nodes()}
+    dict_size = {node: 1 for node in G.nodes}
+    nx.set_node_attributes(G, dict_immunization, 'immunization')
+    nx.set_node_attributes(G, dict_size, 'size')
+
+    return G
+
+
+def randomGraph4(n, p):
+    G = nx.generators.random_graphs.gnm_random_graph(n, 2*n, directed=True)
+    immunized = rd.sample(range(0, n), int(p * n))
+    dict_immunization = {node: (False if node not in immunized else True) for node in G.nodes()}
+    dict_size = {node: 1 for node in G.nodes}
+    nx.set_node_attributes(G, dict_immunization, 'immunization')
+    nx.set_node_attributes(G, dict_size, 'size')
+    G_aux = G.copy().to_undirected()
+    t_max = getTargetRegion(G_aux)
+    G, max_T, result = paintTarget(G, t_max)
+    return G, t_max
 
 
 def graphFromList(L):
@@ -89,9 +114,11 @@ def drawNetwork(G, bought, name, profit=False):
             G.add_nodes_from([node], label=('ID: ' + str(node) + ' PRFT: '
                                             + str(G.nodes[node]['profit'])))
         else:
-            G.add_nodes_from([node], label=('size: ' + str(G.nodes[node]['size'])))
+            G.add_nodes_from([node], label=('ID:' + str(node) + 'size: ' + str(G.nodes[node]['size'])))
 
     A = to_agraph(G)
+    A.add_subgraph([9, 2, 1], rank='same')
+    A.add_subgraph([12, 7, 8], rank='same')
     A.layout('dot')
     A.draw(name)
 
@@ -163,4 +190,3 @@ def constructCu():
     else:
         T_size += rd.randint(0, int(n / 5)) * max_T
     return max_T, T_size, Cu
-

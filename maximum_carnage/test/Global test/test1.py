@@ -18,7 +18,7 @@ def initial_utility(G, v, alpha, beta):
 
 
 if __name__ == '__main__':
-    G = nx.read_gpickle("complete_bipartite.pickle")
+    G = nx.read_gpickle("flower.pickle")
     dict_size = {n: 1 for n in G.nodes()}
     nx.set_node_attributes(G, dict_size, 'size')
     alpha = G.nodes[0]['alpha']
@@ -45,6 +45,5 @@ if __name__ == '__main__':
             G4.add_edge(i, item)
         for j in range(0, G.number_of_nodes()):
             G4.nodes[j]['profit'] = initial_utility(G4, j, alpha, beta)
-        drawNetwork(G4, BR[0][0], 'player' + str(i) + '.png', profit=True)
-    drawNetwork(G, [], 'case1.png', profit=True)
-    drawNetwork(G3, [], 'case2.png', profit=True)
+
+    drawNetwork(G, [], 'flower.png', profit=True)

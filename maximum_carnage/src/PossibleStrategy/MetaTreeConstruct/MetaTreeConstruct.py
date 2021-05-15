@@ -55,6 +55,8 @@ def constructMetaTree(G, l_I):
             metaTree_dict[tempt[2]] = tempt[0]
             G.nodes[tempt[0]]['size'] += G.nodes[tempt[2]]['size']
             G = nx.contracted_nodes(G, tempt[0], tempt[2], self_loops=False)
+            print(l_I)
+            print(tempt[0], tempt[2])
             l_I.remove(tempt[2])
         else:
             index += 1
@@ -81,5 +83,9 @@ def constructMetaTree(G, l_I):
         metaTree_dict[item] = next(G.neighbors(item))
         G.nodes[next(G.neighbors(item))]['size'] += G.nodes[item]['size']
         G = nx.contracted_nodes(G, next(G.neighbors(item)), item, self_loops=False)
+
+    target_nodes = [item for item in G.nodes() if not G.nodes[item]['immunization']]
+    for item in target_nodes:
+        metaTree_dict[item] = item
 
     return G, metaTree_dict

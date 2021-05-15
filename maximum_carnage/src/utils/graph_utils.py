@@ -11,7 +11,7 @@ def dfs_attacked(M, visited, t):
 
 
 def dfs_reachable(M, Nodes, visited, node):
-    result = 1
+    result = 1.0
     visited[node] = True
     for NEIGHBOR in list(M.adj[node]):
         if not visited[NEIGHBOR] and NEIGHBOR in Nodes:
@@ -130,8 +130,7 @@ def paintTarget(G, T_size):
                 visited[node] = True
                 G.nodes[node]["target"] = False
             else:
-                tempt = []
-                DFS_collapse(G, tempt, visited, node, False)
+                tempt = DFS_collapse(G, [], visited, node, False)
                 if len(tempt) == T_size:
                     result.append(tempt)
                     max_T += T_size

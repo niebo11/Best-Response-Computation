@@ -24,31 +24,44 @@ def initial_opt(opt, mappingG, mappingM):
 # G graph
 # C element of the connected component
 # T nodes we are connected to
-def Utility(G, C, T, targetRegions, max_T, size_T):
-    total = 0
-    for item in targetRegions:
-        visited = {key: (True if key in item else False) for key in C}
-        result = 0
-        for elem in T:
-            if not visited[elem]:
-                result += dfs_reachable(G, C, visited, elem)
-        total += size_T / max_T * result
+def Utility(G, C, T, targetRegions, max_T, size_T, Targeted, Cinc):
+    total = 0.0
+    if len(targetRegions) > 0:
+        probabilityNotAttacked = 1 - sum([len(item) for item in targetRegions]) / max_T
+        for item in targetRegions:
+            if (Targeted and set(Cinc).isdisjoint(item)) or not Targeted:
+                visited = {key: (True if key in item else False) for key in C}
+                result = 0
+                for elem in T:
+                    if not visited[elem]:
+                        result += dfs_reachable(G, C, visited, elem)
+                total += size_T / max_T * result
+        if T:
+            total += probabilityNotAttacked * len(C)
+    else:
+        if T:
+            if Targeted:
+                total = (1 - size_T/max_T) * len(C)
+            else:
+                total = len(C)
+        else:
+            total = 0
     return total
 
 
-def possibleStrategy(G, M, Imm, Ci, Cinc, alpha, max_T, T_size):
+def possibleStrategy(G, M, Imm, Ci, Cinc, alpha, max_T, T_size, Targeted):
     B = []
     for C in Ci:
-        B += partnerSetSelect(G.subgraph(C), C, Cinc, alpha, max_T, T_size)
+        B += partnerSetSelect(G.subgraph(C), C, Cinc, alpha, max_T, T_size, Targeted)
     return M + B, Imm
 
 
-def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
+def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size, Targeted):
     targetRegions = getTargetRegion(G, CI)
     tempt = [item for item in Cinc if item in CI]
-    empty = Utility(G, CI, tempt, targetRegions, max_T, T_size)
+    empty = Utility(G, CI, tempt, targetRegions, max_T, T_size, Targeted, Cinc)
     CImm = [item for item in CI if G.nodes[item]['immunization']]
-    single_edge = {item: (Utility(G, CI, list(set([item] + tempt)), targetRegions, max_T, T_size) - alpha)
+    single_edge = {item: (Utility(G, CI, list(set([item] + tempt)), targetRegions, max_T, T_size, Targeted, Cinc) - alpha)
                    for item in CImm if item not in Cinc}
     if len(single_edge) > 0:
         max_single_edge = max(single_edge, key=single_edge.get)
@@ -70,23 +83,26 @@ def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size):
                 opt = MetaTreeSelect(M1, Cinc_f, alpha, T_size)
                 opt = initial_opt(opt, mappingG, mappingM)
 
-                multiple_edge = {tuple(item): (Utility(G, CI, item + tempt, targetRegions, max_T, T_size)
-                                 - alpha * len(item)) for item in opt}
+                multiple_edge = {tuple(item): (Utility(G, CI, item + tempt, targetRegions, max_T, T_size, Targeted,
+                                                       Cinc) - alpha * len(item), Targeted) for item in opt}
 
                 max_multiple_edge = max(multiple_edge, key=multiple_edge.get)
 
-                if empty > multiple_edge[max_multiple_edge]:
-                    if empty > single_edge[max_single_edge]:
-                        return []
+                if len(single_edge) > 0:
+                    if empty > multiple_edge[max_multiple_edge][0]:
+                        if empty > single_edge[max_single_edge]:
+                            return []
+                        else:
+                            return [max_single_edge]
                     else:
-                        return [max_single_edge]
-                else:
-                    if multiple_edge[max_multiple_edge] > single_edge[max_single_edge]:
-                        return [item for item in max_multiple_edge]
-                    else:
-                        return [max_single_edge]
-
-    if empty > single_edge[max_single_edge]:
-        return []
-    else:
-        return [max_single_edge]
+                        if multiple_edge[max_multiple_edge][0] > single_edge[max_single_edge]:
+                            return [item for item in max_multiple_edge]
+                        else:
+                            return [max_single_edge]
+                return []
+    if len(single_edge) > 0:
+        if empty > single_edge[max_single_edge]:
+            return []
+        else:
+            return [max_single_edge]
+    return []
