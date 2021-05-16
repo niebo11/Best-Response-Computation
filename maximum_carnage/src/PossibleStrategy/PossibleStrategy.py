@@ -2,7 +2,7 @@ from .MetaTreeConstruct.ComponentsCollapse import collapse_graph
 from .MetaTreeConstruct.MetaTreeConstruct import constructMetaTree
 from .MetaTreeSelect.MetaTreeSelect import MetaTreeSelect
 import networkx as nx
-from maximum_carnage.src.utils.graph_utils import renameGraph, dfs_reachable
+from maximum_carnage.src.utils.graph_utils import renameGraph, dfs_reachable, drawNetwork
 
 
 def getTargetRegion(G, Components):
@@ -69,7 +69,6 @@ def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size, Targeted):
     # TODO change parameter
     if len(CImm) > 1:
         G1 = G.subgraph(CI)
-        # drawNetwork(G1)
         G1, mappingG = renameGraph(G1)
         inv_mappingG = {v: k for k, v in mappingG.items()}
         G2, I, collapse_dict = collapse_graph(G1, T_size)

@@ -1,6 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from maximum_carnage.src.PossibleStrategy.MetaTreeSelect.MetaTreeSelect import subTreeSize, leverage
+from maximum_carnage.src.PossibleStrategy.MetaTreeSelect.MetaTreeSelect import subTreeSize, root_tree
 import unittest
 import jgraph as ig
 
@@ -19,7 +19,7 @@ class testSubTreeSize(unittest.TestCase):
 
     def test_level_function(self):
         visited = [False] * self.Graph_Simple.number_of_nodes()
-        level_dict = leverage(self.Graph_Simple, 0, visited, {}, 0)
+        level_dict = root_tree(self.Graph_Simple, 0, visited, {}, 0)
         self.assertEqual(level_dict, {0: 0, 1: 1, 2: 2, 3: 2}, 'level dictionary')
 
     def test_single_node(self):
@@ -33,7 +33,7 @@ class testSubTreeSize(unittest.TestCase):
         visited = [False] * self.Graph_Simple.number_of_nodes()
         leaf = [x for x in self.Graph_Simple.nodes if self.Graph_Simple.degree[x] == 1]
         sub_tree_sizes = [{} for _ in self.Graph_Simple.nodes]
-        level_dict = leverage(self.Graph_Simple, 0, visited, {}, 0)
+        level_dict = root_tree(self.Graph_Simple, 0, visited, {}, 0)
 
         subTreeSize(self.Graph_Simple, sub_tree_sizes, leaf, level_dict)
         self.assertEqual(sub_tree_sizes[0], {1: 1}, 'node 0')

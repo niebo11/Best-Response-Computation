@@ -24,7 +24,7 @@ def DFS_metaTree_len2(G, T, V, N):
     return T, find
 
 
-# Returns a cycle with parent node O with length > 2
+# Returns a cycle with parent node O with length > 1
 def DFS_metaTree_cycle(G, T, V, Origin, N, length):
     T.append(N)
     aux_T = T[:]
@@ -33,19 +33,21 @@ def DFS_metaTree_cycle(G, T, V, Origin, N, length):
         if node == Origin and length > 1:
             return [T, True]
         elif not V[node]:
-            [T, aux] = DFS_metaTree_cycle(G, T, V, Origin, node, length + 1)
-            if aux:
+            T, find = DFS_metaTree_cycle(G, T, V, Origin, node, length + 1)
+            if find:
                 return [T, True]
             else:
-                T = aux_T
-    return [T, False]
+                T = aux_T[:]
+    return T, False
 
 
+# G is G[C]
 # I list of immunized nodes
+# Return the Meta Tree from a graph G[C]
 def constructMetaTree(G, l_I):
     metaTree_dict = {}
     index = 0
-
+    # Searching path of type (R, R_V, R') and collapsing them
     while index < len(l_I):
         if l_I[index] not in metaTree_dict:
             metaTree_dict[l_I[index]] = l_I[index]
@@ -55,12 +57,11 @@ def constructMetaTree(G, l_I):
             metaTree_dict[tempt[2]] = tempt[0]
             G.nodes[tempt[0]]['size'] += G.nodes[tempt[2]]['size']
             G = nx.contracted_nodes(G, tempt[0], tempt[2], self_loops=False)
-            print(l_I)
-            print(tempt[0], tempt[2])
             l_I.remove(tempt[2])
         else:
             index += 1
 
+    # Searching cycles and collapsing them
     index = 0
     while index < len(l_I):
         if l_I[index] not in metaTree_dict:
@@ -78,6 +79,7 @@ def constructMetaTree(G, l_I):
         else:
             index += 1
 
+    # Collapsing vulnerable leaves to its neighbor
     leaf = [x for x in G.nodes if G.degree[x] == 1 and not G.nodes[x]['immunization']]
     for item in leaf:
         metaTree_dict[item] = next(G.neighbors(item))

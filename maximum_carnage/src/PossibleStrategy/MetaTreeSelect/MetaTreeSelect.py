@@ -1,6 +1,7 @@
 import networkx as nx
 
 
+# Subroutine that computes the dictionary profit
 def profit(M, leaf, rt, parent, l_d, PROFIT, t_r, sub_tree_size):
     result = M.nodes[parent]['size'] * sub_tree_size[rt][parent] / t_r
     for CHILD in list(M.adj[rt]):
@@ -16,6 +17,7 @@ def profit(M, leaf, rt, parent, l_d, PROFIT, t_r, sub_tree_size):
     return result
 
 
+# Returns the child of the node r_t
 def SubTreeNodes(M, tempt, rt, r):
     tempt.append(rt)
     for NEIGHBOR in list(M.adj[rt]):
@@ -24,9 +26,7 @@ def SubTreeNodes(M, tempt, rt, r):
     return
 
 
-# M is the graph
-# rt is the actual vertex
-# r = p(rt)
+# Computes the optimal partner for a tree rooted at rt
 def RootedMetaTreeSelect(M, rt, r, alpha, Cinc, l_d, sub_tree_size, PROFIT, t_r, leaf, nodes):
     opt = []
     for child in list(M.adj[rt]):
@@ -55,18 +55,19 @@ def RootedMetaTreeSelect(M, rt, r, alpha, Cinc, l_d, sub_tree_size, PROFIT, t_r,
     return opt
 
 
-def leverage(M, r, visited, leverage_dict, level):
+# Subroutine used to compute the dictionary for a rooted tree
+def root_tree(M, r, visited, leverage_dict, level):
     visited[r] = True
     leverage_dict[r] = level
 
     for neighbor in list(M.adj[r]):
         if not visited[neighbor]:
-            leverage_dict = leverage(M, neighbor, visited, leverage_dict, level + 1)
+            leverage_dict = root_tree(M, neighbor, visited, leverage_dict, level + 1)
 
     return leverage_dict
 
 
-# TODO review
+# Creates the dictionary SBT
 def subTreeSize(M, sub_tree_sizes, leaf, l_d):
     total_size = sum(nx.get_node_attributes(M, 'size').values())
     sort_i = dict(sorted(l_d.items(), key=lambda x: x[1], reverse=True))
@@ -84,6 +85,7 @@ def subTreeSize(M, sub_tree_sizes, leaf, l_d):
                     sub_tree_sizes[item][CHILD] = total_size - sub_tree_sizes[CHILD][item]
 
 
+# Subroutine that return the optimal partner for a MetaTree
 def MetaTreeSelect(M, Cinc, alpha, target_region):
     # Fulles de M
     leaf = [x for x in M.nodes if M.degree[x] == 1]
@@ -93,7 +95,7 @@ def MetaTreeSelect(M, Cinc, alpha, target_region):
     first_time = True
     for r in leaf:
         visited = [False] * M.number_of_nodes()
-        leverage_dict = leverage(M, r, visited, {}, 0)
+        leverage_dict = root_tree(M, r, visited, {}, 0)
         if first_time:
             subTreeSize(M, sub_tree_sizes, leaf, leverage_dict)
             first_time = False

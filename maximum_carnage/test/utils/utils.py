@@ -11,6 +11,23 @@ def getTargetRegion(G):
     return max(list(map(len, CC)))
 
 
+def targetRegion(G):
+    G_ini = G.to_undirected()
+    G_ini.remove_nodes_from([node for node in G.nodes if G_ini.nodes[node]['immunization']])
+    CC = list(nx.connected_components(G_ini))
+    target_size = max(list(map(len, CC)))
+    result = []
+    for component in CC:
+        if len(component) == target_size:
+            result = result + list(component)
+    for node in G:
+        if node in result:
+            G.nodes[node]['target'] = True
+        else:
+            G.nodes[node]['target'] = False
+    return result
+
+
 def randomGraph(n):
     G = nx.connected_watts_strogatz_graph(n, 2, 1, seed=rd.randint(1, 10000))
     immunized = rd.sample(range(0, n), int(n / 5.0 + 1))
@@ -117,8 +134,25 @@ def drawNetwork(G, bought, name, profit=False):
             G.add_nodes_from([node], label=('ID:' + str(node) + 'size: ' + str(G.nodes[node]['size'])))
 
     A = to_agraph(G)
-    A.add_subgraph([9, 2, 1], rank='same')
-    A.add_subgraph([12, 7, 8], rank='same')
+    A.layout('dot')
+    A.draw(name)
+
+
+def drawNetwork2(G, bought, name):
+    G.graph['overlap'] = False
+    G.graph['node'] = {'shape': 'circle'}
+    G.add_nodes_from(bought, style='filled', fillcolor='lawngreen')
+    G.add_nodes_from([node for node in G.nodes if node not in bought and not G.nodes[node]['immunization']],
+                     style='filled', fillcolor='darkred')
+    G.add_nodes_from([node for node in G.nodes if node not in bought and G.nodes[node]['immunization']],
+                     style='filled', fillcolor='aqua')
+    target = nx.get_node_attributes(G, 'target')
+    target_node = [key for key, value in target.items() if value is True]
+    G.add_nodes_from(target_node, style='filled', fillcolor='orange')
+    for node in G:
+        G.add_nodes_from([node], label=(str(node)))
+
+    A = to_agraph(G)
     A.layout('dot')
     A.draw(name)
 
