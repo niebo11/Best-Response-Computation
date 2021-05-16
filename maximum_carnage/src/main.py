@@ -5,7 +5,7 @@ import networkx as nx
 
 if __name__ == '__main__':
     # read a Game State G(S, I) from a pickle
-    G = nx.read_gpickle("../test/Global test/cycle.pickle")
+    G = nx.read_gpickle("../test/Global test/Nash Equilibrium networks/cycle.pickle")
 
     # Set up the parameters alpha and beta
     alpha = G.nodes[0]['alpha']

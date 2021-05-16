@@ -5,7 +5,7 @@ import networkx as nx
 
 # test used to check NE
 if __name__ == '__main__':
-    G = nx.read_gpickle("cycle.pickle")
+    G = nx.read_gpickle("Nash Equilibrium networks/cycle.pickle")
 
     # Set up some parameters
     dict_size = {n: 1 for n in G.nodes()}
