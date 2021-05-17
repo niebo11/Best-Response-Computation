@@ -11,7 +11,7 @@ def dfs_attacked(M, visited, t):
 
 
 def dfs_reachable(M, Nodes, visited, node):
-    result = 1
+    result = 1.0
     visited[node] = True
     for NEIGHBOR in list(M.adj[node]):
         if not visited[NEIGHBOR] and NEIGHBOR in Nodes:
@@ -130,8 +130,7 @@ def paintTarget(G, T_size):
                 visited[node] = True
                 G.nodes[node]["target"] = False
             else:
-                tempt = []
-                DFS_collapse(G, tempt, visited, node, False)
+                tempt = DFS_collapse(G, [], visited, node, False)
                 if len(tempt) == T_size:
                     result.append(tempt)
                     max_T += T_size
@@ -143,6 +142,7 @@ def paintTarget(G, T_size):
     return G, max_T, result
 
 
+# utility from player v
 def utility_s(G, v, T, max_T):
     result = 0
     for t in T:
@@ -152,3 +152,17 @@ def utility_s(G, v, T, max_T):
         if not visited[v]:
             result += len(t) / max_T * dfs_reachable(G, G.nodes, visited, v)
     return result
+
+
+def initial_utility(G, v, alpha, beta):
+    G_ini = G.to_undirected()
+    G_ini.remove_nodes_from([node for node in G.nodes if G_ini.nodes[node]['immunization']])
+    length_of_vulnerable_region = list(map(len, list(nx.connected_components(G_ini))))
+    if len(length_of_vulnerable_region) > 0:
+        size_T = max(length_of_vulnerable_region)
+    else:
+        size_T = 0
+    G_ini = G.to_undirected()
+    G_ini, max_T, R_t = paintTarget(G_ini, size_T)
+    return utility_s(G_ini, v, R_t, max_T) - len(list(G.out_edges(v))) * alpha - G.nodes[v]['immunization'] * beta
+

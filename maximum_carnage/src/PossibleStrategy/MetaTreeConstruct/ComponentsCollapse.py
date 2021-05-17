@@ -1,24 +1,12 @@
 import networkx as nx
 
 
-# Unnecessary function? Collapse node j into i
-def collapse(G, i, j, collapse_dict):
-    edges = [item for item in G.adj[j] if item not in G.adj[i]]
-    for edge in edges:
-        if edge != i:
-            G.add_edge(i, edge)
-    G.remove_node(j)
-    if i in collapse_dict:
-        collapse_dict[i].append(j)
-    else:
-        collapse_dict[i] = [j]
-
-
 # G network
 # T temporal array with visited nodes
 # V boolean array of visited nodes
 # N actual node
 # I Type of set we are working with (Immunized or not)
+# DFS to search the maximally region in a component C
 def DFS_collapse(G, T, V, N, Imm):
     V[N] = True
     T.append(N)
