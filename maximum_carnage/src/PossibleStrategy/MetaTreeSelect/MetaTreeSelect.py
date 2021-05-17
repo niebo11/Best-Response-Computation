@@ -86,7 +86,7 @@ def subTreeSize(M, sub_tree_sizes, leaf, l_d):
 
 
 # Subroutine that return the optimal partner for a MetaTree
-def MetaTreeSelect(M, Cinc, alpha, target_region):
+def MetaTreeSelect(M, Cinc, alpha, max_T):
     # Fulles de M
     leaf = [x for x in M.nodes if M.degree[x] == 1]
     opt = []
@@ -101,9 +101,9 @@ def MetaTreeSelect(M, Cinc, alpha, target_region):
             first_time = False
         w = next(M.neighbors(r))
         PROFIT = {item: {item: M.nodes[next(M.neighbors(item))]['size'] *
-                  sub_tree_sizes[item][next(M.neighbors(item))] / target_region} for item in leaf}
+                  sub_tree_sizes[item][next(M.neighbors(item))] / max_T} for item in leaf}
         aux = set([r] + RootedMetaTreeSelect(M, w, r, alpha, Cinc, leverage_dict, sub_tree_sizes, PROFIT,
-                                             target_region, leaf, M.nodes))
+                                             max_T, leaf, M.nodes))
         if aux not in opt:
             opt.append(aux)
     return opt

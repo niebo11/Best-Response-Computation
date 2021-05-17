@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fac809a3-6bb8-4472-b0ad-065aa9a8e927" name="Default Changelist" comment="" />
+    <list default="true" id="fac809a3-6bb8-4472-b0ad-065aa9a8e927" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maximum_carnage/src/PossibleStrategy/MetaTreeSelect/MetaTreeSelect.py" beforeDir="false" afterPath="$PROJECT_DIR$/maximum_carnage/src/PossibleStrategy/MetaTreeSelect/MetaTreeSelect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maximum_carnage/src/PossibleStrategy/PossibleStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/maximum_carnage/src/PossibleStrategy/PossibleStrategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maximum_carnage/test/Global test/test3_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/maximum_carnage/test/Global test/test3_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/MetaTreeConstruct/ComponentsCollapse.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/MetaTreeConstruct/ComponentsCollapse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/MetaTreeConstruct/MetaTreeConstruct.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/MetaTreeConstruct/MetaTreeConstruct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/MetaTreeSelect/MetaTreeSelect.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/MetaTreeSelect/MetaTreeSelect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/PossibleStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/PossibleStrategy/PossibleStrategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/bestResponse.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/bestResponse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_attack/src/utils/graph_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_attack/src/utils/graph_utils.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="feature/test_greedySelect" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -63,8 +75,8 @@
       <recent name="C:\Users\Equipo\PycharmProjects\TFG\maximum_carnage\test\Global test" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test1">
-    <configuration name="draw" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.main (1)">
+    <configuration name="graph_generator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="TFG" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -72,11 +84,53 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/maximum_carnage/test/Global test/graphs" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/maximum_carnage/test" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/test/Global test/graphs/draw.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/test/graph_generator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TFG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/random_attack/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/random_attack/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TFG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/maximum_carnage/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/src/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -106,7 +160,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test2.2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test3_plot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="TFG" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -118,49 +172,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/test/Global test/test2.2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test4" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="TFG" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/maximum_carnage/test/Global test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/test/Global test/test4.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test5" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="TFG" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/maximum_carnage/test/Global test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/test/Global test/test5.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maximum_carnage/test/Global test/test3_plot.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -171,11 +183,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main (1)" />
         <item itemvalue="Python.test1" />
-        <item itemvalue="Python.draw" />
-        <item itemvalue="Python.test5" />
-        <item itemvalue="Python.test2.2" />
-        <item itemvalue="Python.test4" />
+        <item itemvalue="Python.test3_plot" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.graph_generator" />
       </list>
     </recent_temporary>
   </component>
@@ -223,7 +235,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621197605360</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="delete useless repository">
+      <created>1621247717206</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1621247717206</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -245,6 +264,18 @@
     <MESSAGE value="Update test files" />
     <MESSAGE value="nash graph added" />
     <MESSAGE value="files more organized" />
-    <option name="LAST_COMMIT_MESSAGE" value="files more organized" />
+    <MESSAGE value="delete useless repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="delete useless repository" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/random_attack/src/main.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

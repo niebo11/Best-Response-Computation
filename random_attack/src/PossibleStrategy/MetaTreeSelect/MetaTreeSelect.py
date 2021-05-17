@@ -27,16 +27,16 @@ def SubTreeNodes(M, tempt, rt, r):
 # M is the graph
 # rt is the actual vertex
 # r = p(rt)
-def RootedMetaTreeSelect(M, rt, r, alpha, l_d, sub_tree_size, PROFIT, t_r, leaf, nodes):
+def RootedMetaTreeSelect(M, rt, r, alpha, Cinc, l_d, sub_tree_size, PROFIT, t_r, leaf, nodes):
     opt = []
     for child in list(M.adj[rt]):
         if child != r:
             subTreeNodes = []
             SubTreeNodes(M, subTreeNodes, child, rt)
-            opt = opt + RootedMetaTreeSelect(M, child, rt, alpha, l_d, sub_tree_size, PROFIT,
+            opt = opt + RootedMetaTreeSelect(M, child, rt, alpha, Cinc, l_d, sub_tree_size, PROFIT,
                                              t_r, leaf, subTreeNodes)
 
-    if not (M.nodes[rt]['immunization']) or len(opt) != 0:
+    if not (M.nodes[rt]['immunization']) or len(opt) != 0 or rt in Cinc:
         return opt
 
     max_profit = -1
@@ -50,6 +50,7 @@ def RootedMetaTreeSelect(M, rt, r, alpha, l_d, sub_tree_size, PROFIT, t_r, leaf,
             if p > max_profit:
                 max_profit = p
                 max_l = L
+    print(type(max_profit), type(alpha))
     if max_profit > alpha:
         opt.append(max_l)
     return opt
@@ -87,7 +88,7 @@ def SubTreeSize(M, sub_tree_sizes, leaf, l_d):
                     sub_tree_sizes[item][NEIGHBOR] = total_size - sub_tree_sizes[NEIGHBOR][item]
 
 
-def MetaTreeSelect(M, alpha, target_region):
+def MetaTreeSelect(M, Cinc, alpha, max_T):
     # Fulles de M
     leaf = [x for x in M.nodes if M.degree[x] == 1]
     opt = []
@@ -102,9 +103,9 @@ def MetaTreeSelect(M, alpha, target_region):
             first_time = False
         w = next(M.neighbors(r))
         PROFIT = {item: {item: M.nodes[next(M.neighbors(item))]['size'] *
-                  sub_tree_sizes[item][next(M.neighbors(item))] / target_region} for item in leaf}
-        aux = set([r] + RootedMetaTreeSelect(M, w, r, alpha, leverage_dict, sub_tree_sizes, PROFIT,
-                                             target_region, leaf, M.nodes))
+                  sub_tree_sizes[item][next(M.neighbors(item))] / max_T} for item in leaf}
+        aux = set([r] + RootedMetaTreeSelect(M, w, r, alpha, Cinc, leverage_dict, sub_tree_sizes, PROFIT,
+                                             max_T, leaf, M.nodes))
         if aux not in opt:
             opt.append(aux)
     return opt

@@ -27,6 +27,15 @@ def DFS(G, temp, node, visited, Immunized):
     return [temp, Immunized]
 
 
+def dfs_reachable(M, Nodes, visited, node):
+    result = 1.0
+    visited[node] = True
+    for NEIGHBOR in list(M.adj[node]):
+        if not visited[NEIGHBOR] and NEIGHBOR in Nodes:
+            result += dfs_reachable(M, Nodes, visited, NEIGHBOR)
+    return result
+
+
 def dfs_attacked(M, visited, t):
     visited[t] = True
     for NEIGHBOR in list(M.adj[t]):
@@ -104,14 +113,13 @@ def paintTarget(G):
     return G
 
 
-def utility_s(G, T, v):
-    target_objectives = [item for item in G.nodes() if G.nodes[item]['target']]
+def utility_s(G, TR, v):
     result = 0
-    for t in target_objectives:
+    max_T = len([node for node in G if not G.nodes[node]['immunization']])
+    for t in TR:
         visited = {item: False for item in G.nodes()}
-        dfs_attacked(G, visited, t)
-        result += 1
-        for node in T:
-            if not visited[node]:
-                result += DFS_size(G, 0, node, visited)
+        for item in t:
+            visited[item] = True
+        if not visited[v]:
+            result += len(t) / max_T * dfs_reachable(G, G.nodes, visited, v)
     return result

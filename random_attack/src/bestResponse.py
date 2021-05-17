@@ -1,7 +1,7 @@
 from utils.graph_utils import connectedComponents, paintTarget, utility_s, DFS_size, drawNetwork
 from UniformSubSetSelect.UniformSubSetSelect import uniformSubSetSelect
 from GreedySelect.GreedySelect import greedySelect
-from PossibleStrategy.PossibleStrategy import possibleStrategy
+from PossibleStrategy.PossibleStrategy import possibleStrategy, getTargetRegion
 import networkx as nx
 
 
@@ -43,27 +43,45 @@ def bestResponse(G, v, alpha, beta):
     Ag = greedySelect(Cu_minus_Cinc, T_size, alpha)
 
     utility = []
-    #
+
+    # We do not buy immunization
     G_undirected = G.to_undirected()
-    nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
     G1_undirected = paintTarget(G_undirected)
     G1_undirected.remove_node(v)
-    Su = possibleStrategy(G1_undirected, Au, False, Ci, Cinc, alpha, T_size + 1)
-    utility.append(1 / (T_size + 1) * utility_s(G1_undirected, Su[0] + Cinc, v) - len(Su[0]) * alpha - Su[1] * beta)
-    #
+    Su = possibleStrategy(G1_undirected, Au, False, Ci, Cinc, alpha, T_size + 1, currentSize, Targeted=True)
+
+    G1_undirected.add_node(v)
+    G1_undirected.nodes[v]['immunization'] = False
+    G1_undirected.nodes[v]['target'] = True
+    for node in Su[0] + Cinc:
+        G1_undirected.add_edge(v, node)
+    TR = getTargetRegion(G1_undirected, [node for node in G1_undirected])
+    utility.append(utility_s(G1_undirected, TR, v) - len(Su[0]) * alpha - Su[1] * beta)
+
+    # We buy immunization
     G_undirected = G.to_undirected()
-    nx.set_node_attributes(G_undirected, {v: True}, 'immunization')
     G2_undirected = paintTarget(G_undirected)
+    G2_undirected.remove_node(v)
+    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, T_size, currentSize, Targeted=False)
 
-    Sg = possibleStrategy(G2_undirected, Ag, True, Ci, Cinc, alpha, T_size)
+    G2_undirected.add_node(v)
+    G2_undirected.nodes[v]['immunization'] = True
+    G2_undirected.nodes[v]['target'] = False
+    for node in Sg[0] + Cinc:
+        G2_undirected.add_edge(v, node)
+    TR = getTargetRegion(G2_undirected, [node for node in G2_undirected])
+    utility.append(utility_s(G1_undirected, TR, v) - len(Sg[0]) * alpha - Sg[1] * beta)
 
-    drawNetwork(G1_undirected)
-
-    utility.append(1 / T_size * utility_s(G1_undirected, Sg[0] + Cinc, v) - len(Sg[0]) * alpha - Sg[1] * beta)
-    #
+    # empty strategy
+    G_undirected = G.to_undirected()
+    nx.set_node_attributes(G_undirected, {v: False}, 'immunization')
+    G3_undirected = paintTarget(G_undirected)
+    utility.append(utility_s(G3_undirected, TR, v))
 
     i = utility.index(max(utility))
     if i == 0:
         return Su, utility[i]
-    else:
+    elif i == 1:
         return Sg, utility[i]
+    else:
+        return ([], False), utility[i]

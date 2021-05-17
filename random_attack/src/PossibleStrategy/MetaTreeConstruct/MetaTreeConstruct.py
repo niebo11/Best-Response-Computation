@@ -10,7 +10,6 @@ def DFS_metaTree_len2(G, T, V, N):
     if len(T) == 3:
         return T, True
     for node in list(G.adj[N]):
-        # print(N, node, T)
         if not V[node]:
             if G.nodes[node]['immunization']:
                 T, find = DFS_metaTree_len2(G, T, V, node)
@@ -25,29 +24,30 @@ def DFS_metaTree_len2(G, T, V, N):
     return T, find
 
 
-# Returns a cycle with parent node O with length > 2
+# Returns a cycle with parent node O with length > 1
 def DFS_metaTree_cycle(G, T, V, Origin, N, length):
     T.append(N)
     aux_T = T[:]
     V[N] = True
-    # print(T)
     for node in list(G.adj[N]):
         if node == Origin and length > 1:
             return [T, True]
         elif not V[node]:
-            [T, aux] = DFS_metaTree_cycle(G, T, V, Origin, node, length + 1)
-            if aux:
+            T, find = DFS_metaTree_cycle(G, T, V, Origin, node, length + 1)
+            if find:
                 return [T, True]
             else:
-                T = aux_T
-    return [T, False]
+                T = aux_T[:]
+    return T, False
 
 
+# G is G[C]
 # I list of immunized nodes
+# Return the Meta Tree from a graph G[C]
 def constructMetaTree(G, l_I):
     metaTree_dict = {}
     index = 0
-
+    # Searching path of type (R, R_V, R') and collapsing them
     while index < len(l_I):
         if l_I[index] not in metaTree_dict:
             metaTree_dict[l_I[index]] = l_I[index]
@@ -61,6 +61,7 @@ def constructMetaTree(G, l_I):
         else:
             index += 1
 
+    # Searching cycles and collapsing them
     index = 0
     while index < len(l_I):
         if l_I[index] not in metaTree_dict:
@@ -78,10 +79,15 @@ def constructMetaTree(G, l_I):
         else:
             index += 1
 
+    # Collapsing vulnerable leaves to its neighbor
     leaf = [x for x in G.nodes if G.degree[x] == 1 and not G.nodes[x]['immunization']]
     for item in leaf:
         metaTree_dict[item] = next(G.neighbors(item))
         G.nodes[next(G.neighbors(item))]['size'] += G.nodes[item]['size']
         G = nx.contracted_nodes(G, next(G.neighbors(item)), item, self_loops=False)
+
+    target_nodes = [item for item in G.nodes() if not G.nodes[item]['immunization']]
+    for item in target_nodes:
+        metaTree_dict[item] = item
 
     return G, metaTree_dict

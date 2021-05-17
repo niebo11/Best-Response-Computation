@@ -79,7 +79,7 @@ def partnerSetSelect(G, CI, Cinc, alpha, max_T, T_size, Targeted):
             Cinc_f = list({inv_mappingM[metaTree_dict[collapse_dict[inv_mappingG[item]]]] for item in tempt})
 
             if len([item for item in M1.nodes if M1.nodes[item]['immunization']]) > 1:
-                opt = MetaTreeSelect(M1, Cinc_f, alpha, T_size)
+                opt = MetaTreeSelect(M1, Cinc_f, alpha, max_T)
                 opt = initial_opt(opt, mappingG, mappingM)
 
                 multiple_edge = {tuple(item): (Utility(G, CI, item + tempt, targetRegions, max_T, T_size, Targeted,
